@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+/*!
+ * gitlab
+ * Copyright(c) 2012 fengmk2 <fengmk2@gmail.com>
+ * MIT Licensed
+ */
+
+"use strict";
+
+/**
+ * Module dependencies.
+ */
+
+var path = require('path');
+var fs = require('fs');
+var exec = require('child_process').exec;
+
+var args = process.argv.slice(2);
+var action = args[1];
+var name = args[0] || '';
+if (name === 'p') {
+  name = 'profile';
+}
+
+var url = 'http://gitlab.alibaba-inc.com/' + name;
+
+if (action === 'mrn') {
+  url += '/merge_requests/new';
+} else if (action === 'mr') {
+  url += '/merge_requests';
+} else if (action === 'f') {
+  url += '/tree/master';
+} else if (action === 'c') {
+  url += '/commits/master';
+} else if (action === 'b') {
+  url += '/repository';
+} else if (action === 'n') {
+  url += '/graph';
+} else if (action === 'i') {
+  url += '/issues';
+} else if (action === 'w') {
+  url += '/wall';
+} else if (action === 'wiki') {
+  url += '/wikis/index';
+}
+
+exec('open ' + url, function () {
+  process.exit(0);
+});
