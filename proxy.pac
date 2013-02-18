@@ -29,7 +29,8 @@ function FindProxyForURL(url, host) {
     ];
     var proxyUserWildcardList  = [
     '*.twitter.com*',
-    '*.youtube.com*'
+    '*.youtube.com*',
+    '*.morningpics.com*'
     ];
 
     //gfwlist Rules
