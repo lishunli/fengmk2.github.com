@@ -30,7 +30,7 @@ If you want to help add more dynamic languagues, please leave the **implement co
 
 ## Results
 
-(^_^) c > java > go > scala > luajit > nodejs > pypy > ruby 1.9.3+ > lua > php > python > perl > ruby 1.8.x (T_T)
+(^_^) c > java > go > scala > luajit > nodejs > ruby 2.0.0-p0 > pypy > ruby 1.9.3+ > lua > php > python > perl > ruby 1.8.x (T_T)
 
 <table>
   <tr><th>Language</th><th>Times (user)</th><th>Position</th><th>Version</th></tr>
@@ -81,51 +81,57 @@ If you want to help add more dynamic languagues, please leave the **implement co
     <td>v0.8.8</td>
   </tr>
   <tr>
+    <td style="color: red;">ruby 2.0.0-p0</td>
+    <td>0m27.777s</td>
+    <td>#7</td>
+    <td>ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-darwin12.2.0]</td>
+  </tr>
+  <tr>
     <td style="color: red;">pypy</td>
     <td>0m30.010s</td>
-    <td>#7</td>
+    <td>#8</td>
     <td>Python 2.7.2 (341e1e3821ff, Jun 07 2012, 15:42:54) [PyPy 1.9.0 with GCC 4.2.1]</td>
   </tr>
   <tr>
     <td style="color: red;">ruby 1.9.x</td>
     <td>0m37.404s</td>
-    <td>#8</td>
+    <td>#9</td>
     <td>ruby 1.9.3p194 (2012-04-20 revision 35410) [x86_64-darwin12.1.0]</td>
   </tr>
   <tr>
     <td style="color: red;">lua</td>
     <td>0m40.709s</td>
-    <td>#9</td>
+    <td>#10</td>
     <td>Lua 5.1.4 Copyright (C) 1994-2008 Lua.org, PUC-Rio</td>
   </tr>
   <tr>
     <td style="color: red;">jython</td>
     <td>0m53.699s</td>
-    <td>#10</td>
+    <td>#11</td>
     <td>Jython 2.5.2</td>
   </tr>
   <tr>
     <td style="color: red;">php</td>
     <td>1m17.728s</td>
-    <td>#11</td>
+    <td>#12</td>
     <td>PHP 5.4.6 (cli) (built: Sep  8 2012 23:49:53) </td>
   </tr>
   <tr>
     <td style="color: red;">python</td>
     <td>1m17.979s</td>
-    <td>#12</td>
+    <td>#13</td>
     <td>Python 2.7.2</td>
   </tr>
   <tr>
     <td style="color: red;">perl</td>
     <td>2m41.259s</td>
-    <td>#13</td>
+    <td>#14</td>
     <td>This is perl 5, version 12, subversion 4 (v5.12.4) built for darwin-thread-multi-2level</td>
   </tr>
   <tr>
     <td style="color: red;">ruby 1.8.x</td>
     <td>3m35.135s</td>
-    <td>#14</td>
+    <td>#15</td>
     <td>ruby 1.8.7 (2012-02-08 patchlevel 358) [universal-darwin12.0]</td>
   </tr>
 </table>
@@ -552,6 +558,16 @@ ruby 1.9.3p194 (2012-04-20 revision 35410) [x86_64-darwin12.1.0]
 real  0m39.972s
 user  0m37.404s
 sys 0m0.124s
+```
+
+ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-darwin12.2.0]
+
+```bash
+102334155
+
+real  0m29.078s
+user  0m27.777s
+sys 0m0.072s
 ```
 
 ### lua
