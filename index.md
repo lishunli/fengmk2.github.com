@@ -94,6 +94,7 @@
 
 * [Blog/2013](./blog/2013)
  * [Generate cobertura-xml report with mocha](./blog/2013/02/cobertura-xml-with-mocha.html) 
+ * [nodejs domain module hello world and benchmark](./blog/2013/03/domain-helloworld-benchmark.html)
 * [Blog/2012](./blog/2012)
  * [使用 connect-domain 捕获异步调用中出现的异常](./blog/2012/12/domain_module.html)
  * [模拟 Nagle 算法的Delayed Ack](./benchmark/nagle-algorithm-delayed-ack-mock.html)
