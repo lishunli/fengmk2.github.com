@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  
+  <title> alimovie </title>
+  
+  <meta name="description" content="A jQuery library for modern HTML presentations">
+  <meta name="author" content="Caleb Troughton">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+  
+  <!-- Core and extension CSS files -->
+  <link rel="stylesheet" href="./deck.js/core/deck.core.css">
+  <link rel="stylesheet" href="./deck.js/extensions/goto/deck.goto.css">
+  <link rel="stylesheet" href="./deck.js/extensions/menu/deck.menu.css">
+  <link rel="stylesheet" href="./deck.js/extensions/navigation/deck.navigation.css">
+  <link rel="stylesheet" href="./deck.js/extensions/status/deck.status.css">
+  <link rel="stylesheet" href="./deck.js/extensions/hash/deck.hash.css">
+  <link rel="stylesheet" href="./style.css">
+  
+  <!-- Theme CSS files (menu swaps these out) -->
+  <link rel="stylesheet" id="style-theme-link" href="./deck.js/themes/style/neon.css">
+  <link rel="stylesheet" id="transition-theme-link" href="./deck.js/themes/transition/horizontal-slide.css">
+  
+  <link rel="stylesheet" href="http://fengmk2.github.com/css/prettify.css" />
+  <script src="http://fengmk2.github.com/js/jquery-1.7.min.js"></script>
+  <script src="http://fengmk2.github.com/js/prettify.js"></script>
+
+  <script src="./deck.js/modernizr.custom.js"></script>
+</head>
+
+<body class="deck-container">
+
+
+<section class="slide"><h1>alimovie</h1>
+<p><img src="http://gitlab.alibaba-inc.com/edp/alimovie/blob/master/logo.png" alt="logo">
+
+</p>
+<p>阿里电影公司管理系统, <a href="http://alimovie.alibaba-inc.com/"><a href="http://alimovie.alibaba-inc.com/">http://alimovie.alibaba-inc.com/</a></a>
+
+
+</p>
+<h2>联系</h2>
+<ul>
+<li>开发，运维: <a href="http://work.alibaba-inc.com/work/u/43624">@苏千</a></li>
+<li>Bug: <a href="http://gitlab.alibaba-inc.com/edp/alimovie/issues"><a href="http://gitlab.alibaba-inc.com/edp/alimovie/issues">http://gitlab.alibaba-inc.com/edp/alimovie/issues</a></a></li>
+</ul>
+</section>
+
+<section class="slide"><h2>权限说明</h2>
+<p>按电影角色划分:
+
+</p>
+<ul>
+<li>制片人(admin): 即系统管理员<ul>
+<li>创建和维护电影季(season)</li>
+<li>指定当季导演</li>
+<li>给当季剧目打分</li>
+<li>修改剧目导演，剧目信息(填充历史数据场景使用)</li>
+</ul>
+</li>
+<li>导演(diretor): 剧目负责人<ul>
+<li>创建剧目(movie)，维护剧目信息</li>
+<li>维护剧目成员(movie_member)</li>
+<li>分配当季剧目所得分数(star)</li>
+</ul>
+</li>
+<li>演员(actor): 剧组成员，所有人都具有的基本角色<ul>
+<li>上传文件(file)</li>
+<li>编辑个人信息(profile)</li>
+<li>提交剧目 Issues</li>
+</ul>
+</li>
+</ul>
+</section>
+
+<section class="slide"><h2>使用说明</h2>
+<h3>创建和编辑电影季 season 信息</h3>
+<p>制片人(admin) 能创建和编辑电影季(season)
+
+</p>
+<p><img src="http://nfs.nodeblog.org/7/b/7b59358ec1b055b06caba1ab5cd264a0.png" alt="1">
+
+</p>
+</section>
+
+<section class="slide"><h3>任意长文本内容，都是基于 Markdown 格式的</h3>
+<p><img src="http://nfs.nodeblog.org/e/4/e4e89cac8d3960a07e7b4d1ed07cc391.png" alt="2">
+
+</p>
+</section>
+
+<section class="slide"><h3>编辑页面有离开当前页面提醒</h3>
+<p><img src="http://nfs.nodeblog.org/c/2/c2ecf759b44382c3e98026d16193808c.png" alt="3">
+
+</p>
+</section>
+
+<section class="slide"><h3>制片人还需要负责添加当季导演</h3>
+<p><img src="http://nfs.nodeblog.org/9/4/9416d0b4479a76e8282c0b68882cd9f4.png" alt="4">
+
+</p>
+</section>
+
+<section class="slide"><h3>当季剧目列表</h3>
+<p><img src="http://nfs.nodeblog.org/6/3/6338994e84a6106f718c0c5b52fa985c.png" alt="4.1">
+
+</p>
+</section>
+
+<section class="slide"><h3>当季演员列表</h3>
+<p><img src="http://nfs.nodeblog.org/a/4/a4cd52853d8bad14ddc1e75181c88146.png" alt="4.2">
+
+</p>
+</section>
+
+<section class="slide"><h3>导演创建和维护剧目(movie)</h3>
+<p>当季具有导演角色的人，都可以创建剧目
+
+</p>
+<p><img src="http://nfs.nodeblog.org/9/f/9fcba863f3554e35c7e9ef3d1547541e.png" alt="5">
+
+</p>
+</section>
+
+<section class="slide"><h3>支持绑定 Gitlab 项目</h3>
+<p><img src="http://nfs.nodeblog.org/c/d/cdabba93ebbf27e93a7879a6d95abe11.png" alt="6">
+
+</p>
+</section>
+
+<section class="slide"><h3>支持自动导入上季延续剧目信息</h3>
+<p><img src="http://nfs.nodeblog.org/5/9/59d6c77c24328d015f77636715eace79.png" alt="7">
+
+</p>
+</section>
+
+<section class="slide"><h3>剧目文件上传(file)</h3>
+<p><img src="http://nfs.nodeblog.org/1/4/14f996b19c186ca52211367906c3a1d2.png" alt="8">
+
+</p>
+</section>
+
+<section class="slide"><h3>剧组成员维护</h3>
+<p><img src="http://nfs.nodeblog.org/9/b/9b807ab6024c91ea61cb4c06f14dbec9.png" alt="9">
+
+</p>
+</section>
+
+<section class="slide"><h3>时光机(历史电影季列表 season list)</h3>
+<p><img src="http://nfs.nodeblog.org/d/9/d94f03bc8ce6304c4f69da3889978d80.png" alt="10">
+
+</p>
+</section>
+
+<section class="slide"><h3>星光大道(演员全剧目统计)</h3>
+<p><img src="http://nfs.nodeblog.org/d/2/d26cbf881b51313204755bbe44df0e3f.png" alt="11">
+
+</p>
+</section>
+
+<section class="slide"><h3>个人信息维护页面</h3>
+<p>目前支持自定义头像
+
+</p>
+<p><img src="http://nfs.nodeblog.org/3/8/38850c6358d52dc1706e505bfb8b06d2.png" alt="12">
+</p>
+</section>
+
+
+<p class="deck-status">
+  <span class="deck-status-current"></span>
+  /
+  <span class="deck-status-total"></span>
+</p>
+
+<form action="." method="get" class="goto-form">
+  <label for="goto-slide">Go to slide:</label>
+  <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+  <datalist id="goto-datalist"></datalist>
+  <input type="submit" value="Go">
+</form>
+
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- Deck Core and extensions -->
+<script src="./deck.js/core/deck.core.js"></script>
+<script src="./deck.js/extensions/hash/deck.hash.js"></script>
+<script src="./deck.js/extensions/menu/deck.menu.js"></script>
+<script src="./deck.js/extensions/goto/deck.goto.js"></script>
+<script src="./deck.js/extensions/status/deck.status.js"></script>
+<script src="./deck.js/extensions/navigation/deck.navigation.js"></script>
+
+<!-- Specific to this page -->
+<script>
+$(function() {
+  // Deck initialization
+  $.deck('.slide');
+  $('pre code').parent().addClass('prettyprint');
+  prettyPrint();
+});
+</script>
+
+</body>
+</html>
