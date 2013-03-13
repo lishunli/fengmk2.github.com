@@ -1,9 +1,18 @@
-# alimovie
+# ![logo](http://gitlab.alibaba-inc.com/edp/alimovie/blob/master/logo.png)
 
-![logo](http://gitlab.alibaba-inc.com/edp/alimovie/blob/master/logo.png)
+---
+
+## 简介
 
 阿里电影公司管理系统, [http://alimovie.alibaba-inc.com/](http://alimovie.alibaba-inc.com/)
 
+维护剧目，演员，导演的一切信息。
+
+既然我们实施了电影公司的开发模式，那么必须有配套的研发管理系统，于是我就按照电影公司的需求下，使用nodejs快速开发了alimovie。
+
+目前是第一期，完成了基本功能，后续会不断地迭代满足各种新需求。
+
+未来将会接入gitlab hook，监控信息，报警信息，访问统计等系统信息。
 
 ## 联系
 
