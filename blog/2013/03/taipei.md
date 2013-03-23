@@ -40,7 +40,16 @@
 
 ## 行程 10天
 
-* 3.28 杭州 - 台北 住台北淡水 [淡水宰相民宿](http://zs.okgo.tw/traffic.html)
+* 3.28 杭州 - 台北 - 淡水 住淡水 
+
+早上8:30租车去机场
+
+```
+03 月 28 日 KA627 Dragonair  HGH 11:05   HKG 13:25  0  5:05 321  经济舱 Supersaver (S)
+03 月 28 日 KA5420   Cathay Pacific  HKG 14:35   TPE 16:10  0   77W  经济舱 Supersaver (S)
+```
+
+[淡水宰相民宿](http://zs.okgo.tw/traffic.html)
 
 ```
 ※【捷運】搭乘捷運至淡水捷運站下車，往對面中油加油站旁的英專路步行約5分鐘，「淡水宰相民宿」就在墊腳石書局斜對面79巷進入，巷口有我們的招牌。
@@ -119,6 +128,11 @@
     - 11:14 到达桃园高铁,车程15分钟
     - 11:45 到桃园机场
     - 13:30 飞机起飞，返杭 
+
+```
+04 月 06 日 KA5495   Cathay Pacific  TPE 13:30   HKG 15:10  0  4:40 744  经济舱 Supersaver (S)
+04 月 06 日 KA636 Dragonair  HKG 16:00   HGH 18:10  0   320  经济舱 Supersaver (S)
+```
 
 ## 交通
 
