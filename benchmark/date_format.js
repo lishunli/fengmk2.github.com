@@ -39,6 +39,7 @@ console.log('new Date().toString(): %j', new Date().toString());
 console.log('Date(): %j', Date());
 console.log('fasterAccessDate(): %j', fasterAccessDate());
 console.log('fasterAccessDate2(): %j', fasterAccessDate2());
+console.log('------------------------');
 
 suite
 .add("moment().format('DD/MMM/YYYY:HH:mm:ss ZZ')", function () {
@@ -57,8 +58,8 @@ suite
   fasterAccessDate2();
 })
 // add listeners
-.on('cycle', function (event, bench) {
-  console.log(String(bench));
+.on('cycle', function (event) {
+  console.log(String(event.target));
 })
 .on('complete', function () {
   console.log('Fastest is ' + this.filter('fastest').pluck('name'));
