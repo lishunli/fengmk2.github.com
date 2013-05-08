@@ -43,33 +43,307 @@
 </section>
 
 <section class="slide"><h2>为什么要做</h2>
-<ul>
-<li>目前的性能无法满足</li>
-<li>历史遗留的难点</li>
-<li>全堆栈的nodejs链路</li>
-<li>node-mysql 先行者案例</li>
-</ul>
+<h3>* 目前的性能无法满足</h3>
+<h3>* 历史遗留的难点</h3>
+<h3>* 全堆栈的nodejs链路</h3>
+<h3>* node-mysql 先行者案例</h3>
 </section>
 
 <section class="slide"><h2>怎么做</h2>
 <p>暂定1人完成最初版本，从源代码入手
 
 </p>
-<ul>
-<li>搭建HBase测试环境 <a href="http://abloz.com/hbase/book.html">http://abloz.com/hbase/book.html</a></li>
-<li>看到Java源代码</li>
-<li>尽量在2周内完成 hello world 版本</li>
-</ul>
+<h3>* 搭建HBase测试环境 <a href="http://abloz.com/hbase/book.html">http://abloz.com/hbase/book.html</a></h3>
+<h3>* 看到Java源代码</h3>
+<h3>* 尽量在2周内完成 hello world 版本</h3>
 </section>
 
 <section class="slide"><h2>如果做成了</h2>
+<h3>* 我们会更加了解HBase</h3>
+<h3>* nodejs的方案依然有效</h3>
+<h3>* KV存储性能不再是问题</h3>
+<h3>* 客户端形式引入服务，减少中间节点</h3>
+<h3>* 直接开源，让所有感兴趣的开发者来共同开发</h3>
+</section>
+
+<section class="slide"><h2><a href="https://github.com/TBEDP/node-hbase-client">node-hbase-client</a></h2>
+<h3>Asynchronous HBase client for nodejs, pure javascript implementation.</h3>
+<h3>纯 Javascript 实现的异步 HBase Client.</h3>
+<p><img src="https://raw.github.com/TBEDP/node-hbase-client/master/logo.png" alt="logo">
+
+</p>
+<h3>* Current State: Only test on Hbase 0.94</h3>
+<h3>* jscoverage: <a href="http://fengmk2.github.io/coverage/node-hbase-client.html">84%</a></h3>
+<h2>Install</h2>
+<pre><code>$ npm install hbase-client</code></pre>
+</section>
+
+<section class="slide"><h2>目前里程碑 <code>0.1.0</code> 的 issues 全部完成</h2>
+<p><img src="http://nfs.nodeblog.org/4/1/418ead54f57827ac3e627c26b7c61877.png" alt="milestone0.1.0">
+
+</p>
+</section>
+
+<section class="slide"><h2>Usage: <code>get(table, get, callback)</code></h2>
+<h3>获取一行数据</h3>
+<pre><code class="lang-js">var HBase = require(&#39;hbase-client&#39;);
+
+var client = HBase.create({
+  zookeeperHosts: [
+    &#39;127.0.0.1:2181&#39;, &#39;127.0.0.1:2182&#39;,
+  ],
+  zookeeperRoot: &#39;/hbase-0.94&#39;,
+});
+
+// Get `f1:name, f2:age` from `user` table.
+var param = new HBase.Get(&#39;foo&#39;);
+param.addColumn(&#39;f1&#39;, &#39;name&#39;);
+param.addColumn(&#39;f1&#39;, &#39;age&#39;);
+
+client.get(&#39;user&#39;, param, function (err, result) {
+  console.log(err);
+  var kvs = result.raw();
+  for (var i = 0; i &lt; kvs.length; i++) {
+    var kv = kvs[i];
+    console.log(&#39;key: `%s`, value: `%s`&#39;, kv.toString(), kv.getValue().toString());
+  }
+});</code></pre>
+</section>
+
+<section class="slide"><h2><code>getRow(table, rowkey, columns, callback)</code></h2>
+<h3>提供更加简便的方法</h3>
+<pre><code class="lang-js">client.getRow(table, row, [&#39;f:name&#39;, &#39;f:age&#39;], function (err, r) {
+  r.should.have.keys(&#39;f:name&#39;, &#39;f:age&#39;);
+});</code></pre>
+</section>
+
+<section class="slide"><h2><code>put(table, put, callback)</code></h2>
+<h3>保存数据</h3>
+<pre><code class="lang-js">var put = new HBase.Put(&#39;foo&#39;);
+put.add(&#39;f1&#39;, &#39;name&#39;, &#39;foo&#39;);
+put.add(&#39;f1&#39;, &#39;age&#39;, &#39;18&#39;);
+client.put(&#39;user&#39;, put, function (err) {
+  console.log(err);
+});
+
+client.putRow(table, row, {&#39;f1:name&#39;: &#39;foo name&#39;, &#39;f1:age&#39;: &#39;18&#39;}, function (err) {
+  should.not.exists(err);
+});</code></pre>
+</section>
+
+<section class="slide"><h2>Client Server 通信图</h2>
 <ul>
-<li>我们会更加了解HBase</li>
-<li>nodejs的方案依然有效</li>
-<li>KV存储性能不再是问题</li>
-<li>客户端形式引入服务，减少中间节点</li>
-<li>直接开源，让所有感兴趣的开发者来共同开发</li>
+<li><a href="https://github.com/TBEDP/node-hbase-client/blob/master/communication.txt">communication.txt</a></li>
+<li><a href="https://github.com/apache/hbase/blob/0.94/src/main/java/org/apache/hadoop/hbase/ipc/HRegionInterface.java">RegionInterface.java</a>: 所有的API 都在此接口文件定义</li>
 </ul>
+<p><img src="http://nfs.nodeblog.org/f/2/f274a0f5c3846443f6855276d59f4332.png" alt="communication">
+
+</p>
+</section>
+
+<section class="slide"><h2>Java 对象序列化</h2>
+<h3>Writable: 所有传输的数据对象，都实现了此接口</h3>
+<pre><code class="lang-java">public interface Writable {
+  /** 
+   * Serialize the fields of this object to &lt;code&gt;out&lt;/code&gt;.
+   * 
+   * @param out &lt;code&gt;DataOuput&lt;/code&gt; to serialize this object into.
+   * @throws IOException
+   */
+  void write(DataOutput out) throws IOException;
+
+  /** 
+   * Deserialize the fields of this object from &lt;code&gt;in&lt;/code&gt;.  
+   * 
+   * &lt;p&gt;For efficiency, implementations should attempt to re-use storage in the 
+   * existing object where possible.&lt;/p&gt;
+   * 
+   * @param in &lt;code&gt;DataInput&lt;/code&gt; to deseriablize this object from.
+   * @throws IOException
+   */
+  void readFields(DataInput in) throws IOException;
+}</code></pre>
+</section>
+
+<section class="slide"><h2>Get, Put, Scan</h2>
+<h3>nodejs 版本延续这个约定，实现 <code>write</code> 和 <code>readFields</code>:</h3>
+<pre><code class="lang-js">Get.prototype.write = function (out) {
+  out.writeByte(GET_VERSION);
+  Bytes.writeByteArray(out, this.row);
+  out.writeLong(this.lockId);
+  // ... 此处省略
+};
+
+Get.prototype.readFields = function (io) {
+  var version = io.readByte();
+  if (version &gt; GET_VERSION) {
+    throw new IOException(&quot;unsupported version: &quot; + version);
+  }
+  this.version = version;
+  // ... 此处省略
+};</code></pre>
+</section>
+
+<section class="slide"><h2>DataOutputStream</h2>
+<h3>封装了一些基本类型的序列化: int32, short, byte, char, long, string</h3>
+<h3><code>writeLong</code> 举例</h3>
+<h3>java</h3>
+<pre><code class="lang-java">public final void writeLong(long v) throws IOException {
+  writeBuffer[0] = (byte)(v &gt;&gt;&gt; 56);
+  writeBuffer[1] = (byte)(v &gt;&gt;&gt; 48);
+  writeBuffer[2] = (byte)(v &gt;&gt;&gt; 40);
+  writeBuffer[3] = (byte)(v &gt;&gt;&gt; 32);
+  writeBuffer[4] = (byte)(v &gt;&gt;&gt; 24);
+  writeBuffer[5] = (byte)(v &gt;&gt;&gt; 16);
+  writeBuffer[6] = (byte)(v &gt;&gt;&gt;  8);
+  writeBuffer[7] = (byte)(v &gt;&gt;&gt;  0);
+  out.write(writeBuffer, 0, 8);
+}</code></pre>
+<h3>nodejs</h3>
+<pre><code class="lang-js">DataOutputStream.prototype.writeLong = function (v) {
+  var buf = new Buffer(8);
+  var longV = exports.toLong(v);
+  buf.writeInt32BE(longV.high, 0);
+  buf.writeInt32BE(longV.low, 4);
+  this.write(buf);
+};</code></pre>
+</section>
+
+<section class="slide"><h2>测试，保证正确性</h2>
+<p>使用 <code>java client</code> 代码生成将序列化数据保存到文件中
+
+</p>
+<p><img src="http://nfs.nodeblog.org/8/0/808f336cf7fc8bba46a3da59313ee4aa.png" alt="eclise">
+
+</p>
+</section>
+
+<section class="slide"><h2>nodejs 代码将序列化结果与这些文件的数据进行对比测试</h2>
+<p><img src="http://nfs.nodeblog.org/3/8/38a9f593b9fe7e01027741d3d5020242.png" alt="nodejs">
+
+</p>
+</section>
+
+<section class="slide"><h2>测试保证nodejs序列化跟java序列化完全一致</h2>
+<pre><code class="lang-js">var testJavaBytes = utils.createTestBytes(&#39;get&#39;);
+var cases = [
+  // family, qualifier, row, maxVersions
+  [&#39;f&#39;, &#39;history&#39;, &#39;0f48MDAwMDAwMDAwMDAwMDAwMA==&#39;, 1],
+  [&#39;f&#39;, &#39;history&#39;, &#39;2dbbMDAwMDAwMDAwMDAwMTAwMA==&#39;, 50],
+  [&#39;f&#39;, &#39;history&#39;, &#39;中文rowkey&#39;, 100],
+];
+
+describe(&#39;write()&#39;, function () {
+  it(&#39;should convert Get to bytes&#39;, function () {
+    for (var i = 0; i &lt; cases.length; i++) {
+      var item = cases[i];
+      var row = item[2];
+      var family = item[0];
+      var qualifier = item[1];
+      var maxVersions = item[3];
+      var get = new Get(row);
+      get.addColumn(family, qualifier);
+      get.setMaxVersions(maxVersions)
+      var out = new DataOutputBuffer();
+      get.write(out);
+      var bytes = out.getData();
+      bytes.length.should.above(0);
+      testJavaBytes(&#39;write_&#39; + family + &#39;_&#39; + qualifier + &#39;_&#39; + maxVersions, 
+        row, bytes);
+    }
+  });
+});</code></pre>
+</section>
+
+<section class="slide"><h2>Long 超过53位的整数</h2>
+<pre><code class="lang-js">&gt; Math.pow(2, 53)
+9007199254740992
+&gt; Math.pow(2, 53) + 1
+9007199254740992</code></pre>
+<h3><a href="https://github.com/dcodeIO/Long.js">Long.js</a></h3>
+<pre><code>$ npm install long</code></pre>
+<pre><code class="lang-js">var Long = require(&#39;long&#39;);
+var longVal = new Long(0xFFFFFFFF, 0x7FFFFFFF);
+console.log(longVal.toString());
+// 9223372036854775807</code></pre>
+</section>
+
+<section class="slide"><h2>java &lt;=&gt; nodejs</h2>
+<h3>java</h3>
+<pre><code class="lang-java">public static long toLong(byte[] bytes, int offset, final int length) {
+  long l = 0;
+  for (int i = offset; i &lt; offset + length; i++) {
+    l &lt;&lt;= 8;
+    l ^= bytes[i] &amp; 0xFF;
+  }
+  return l;
+}</code></pre>
+<h3>nodejs</h3>
+<pre><code class="lang-js">exports.toLong = function (v) {
+  // buffer must be 8 bytes
+  return Long.fromBits(v.readInt32BE(4), v.readInt32BE(0));
+};</code></pre>
+</section>
+
+<section class="slide"><h2>性能 Benchmark</h2>
+<p>hbase-client@0.1.0
+
+</p>
+<p><a href="https://github.com/TBEDP/node-hbase-client/blob/master/benchmark.js">benchmark.js</a>
+
+</p>
+<pre><code class="lang-bash">$ node benchmark.js $Concurrency</code></pre>
+<p><strong>Only one node process, one connection for one region(hostname:port).</strong>
+
+</p>
+<p>2 CPUs: <strong>Intel(R) Xeon(R) CPU E5520  @ 2.27GHz</strong>
+
+</p>
+<h3>* Get: 3649 QPS, RT 2.73ms, 10 Concurrency</h3>
+<h3>* Put: 3298 QPS, RT 3.02ms, 10 Concurrency</h3>
+</section>
+
+<section class="slide"><h2>Get</h2>
+<h3>* Get: 3649 QPS, RT 2.73ms, 10 Concurrency</h3>
+<p><img src="http://nfs.nodeblog.org/4/f/4fdd7bd9fc560a28eca4503400ae8f60.png" alt="2">
+
+</p>
+</section>
+
+<section class="slide"><h2>Put</h2>
+<h3>* Put: 3298 QPS, RT 3.02ms, 10 Concurrency</h3>
+<p><img src="http://nfs.nodeblog.org/d/6/d6c0c0f720b91bb51b3ad930e08e90d5.png" alt="1">
+
+</p>
+</section>
+
+<section class="slide"><h2>后续</h2>
+<h3>* <a href="https://github.com/TBEDP/node-hbase-client/issues?milestone=2&amp;state=open">0.2.0</a> 版本发布，将会更加鲁棒性.</h3>
+<h3>* 支持 <code>delete</code>, <code>multi actions</code> 更多标准接口</h3>
+<h3>* 应用在现有项目中, cubeserach, datapi</h3>
+<h3>* 应用在 <a href="http://gitlab.alibaba-inc.com/itier">itier</a> 中，替换到目前的 rest 方式</h3>
+<h3>* 完整的 HBase Client 特性</h3>
+</section>
+
+<section class="slide"><h2>自此，nodejs 全堆栈应用才真正完整</h2>
+<h3>* nodejs &lt;=&gt; MySQL (myfox, garuda, OceanBase)</h3>
+<h3>* nodejs &lt;=&gt; OTS (HTTP RESTful)</h3>
+<h3>* nodejs &lt;=&gt; HBase</h3>
+</section>
+
+<section class="slide"><h2>演员们</h2>
+<h3>@苏千: 导演</h3>
+<p><img src="http://work.alibaba-inc.com/photo/43624.jpg" alt="sq">
+
+</p>
+<h3>@汤尧: 跑龙套</h3>
+<p><img src="http://work.alibaba-inc.com/photo/33772.jpg" alt="ty">
+
+</p>
+<h3>@凤吟: 跑龙套</h3>
+<p><img src="http://work.alibaba-inc.com/photo/58803.jpg" alt="fy">
+
+</p>
 </section>
 
 <section class="slide"><h1>知乎者也 Q&amp;A</h1>
