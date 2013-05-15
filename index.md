@@ -93,6 +93,7 @@
 ## Articles
 
 * [Blog/2013](./blog/2013)
+ * [Use Blanket.js instead of jscover](./blog/2013/05/blanketjs-jscoverage.html)
  * [Generate cobertura-xml report with mocha](./blog/2013/02/cobertura-xml-with-mocha.html) 
  * [nodejs domain module hello world and benchmark](./blog/2013/03/domain-helloworld-benchmark.html)
 * [Blog/2012](./blog/2012)
