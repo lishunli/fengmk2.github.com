@@ -85,6 +85,70 @@ $ make test-cov
 
 `coverage.html` 跟使用 [jscover] 的报告结果一致，缺没有了文件生成，也不再需要去服务器上安装java了。
 
+## Project
+
+对于非lib类项目，如普通的应用项目，进行代码覆盖率测试，同样可以使用 [Blanket.js] 很好地做到。
+
+以 [urlrar](https://github.com/fengmk2/urlrar) 为例:
+
+Markfile
+
+```bash
+TESTS = test/*.test.js
+REPORTER = spec
+TIMEOUT = 10000
+MOCHA_OPTS =
+
+install:
+  @npm install
+
+test: install
+  @NODE_ENV=test ./node_modules/mocha/bin/mocha \
+    --reporter $(REPORTER) \
+    --timeout $(TIMEOUT) \
+    $(MOCHA_OPTS) \
+    $(TESTS)
+
+test-cov: 
+  @URLRAR_COV=1 $(MAKE) test MOCHA_OPTS='--require blanket' REPORTER=html-cov > coverage.html
+  @URLRAR_COV=1 $(MAKE) test MOCHA_OPTS='--require blanket' REPORTER=travis-cov
+
+test-all: test test-cov
+
+.PHONY: test-cov test test-all
+```
+
+package.json
+
+```js
+"devDependencies": {
+    "travis-cov": "*",
+    "blanket": "*",
+    // ...
+  },
+  "scripts": {
+    "test": "make test-all",
+    "blanket": { 
+      "pattern": "//^((?!(node_modules|test)).)*$/",
+      "data-cover-flags": {
+        "debug": false
+      }
+    },
+    "travis-cov": {
+      "threshold": 93
+    }
+  },
+```
+
+```bash
+$ npm test 
+```
+
+运行结果: 包含测试结果和代码覆盖率.
+
+![1](http://nfs.nodeblog.org/f/a/fa73ef3685d050f6efcdf8b7a1f428c1.png)
+
+
 ## 有爱
 
 ^_^ 希望本文对你有用。
