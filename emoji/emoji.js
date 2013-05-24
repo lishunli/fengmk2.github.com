@@ -1,20 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>emojs.js demo</title>
-  <link href="http://fengmk2.github.com/emoji/emoji.css" rel="stylesheet" type="text/css" />
-  <script src="http://fengmk2.github.com/js/jquery-1.7.min.js"></script>
-  <script src="http://fengmk2.github.com/emoji/emoji.js"></script>
-</head>
-<body>
-<div class="emojstext">
-// Auto create by `bin/create_emoji_js.py`
+/*global exports */
+/*!
+ * emoji
+ *
+ * This file auto create by `bin/create_emoji_js.py`.
+ * Emoji\'s table come from <a href="http://code.iamcal.com/php/emoji/">http://code.iamcal.com/php/emoji/</a>
+ * 
+ * Copyright(c) 2012 fengmk2 <fengmk2@gmail.com>
+ * MIT Licensed
+ */
 
-// Emoji's table come from <a href="http://code.iamcal.com/php/emoji/">http://code.iamcal.com/php/emoji/</a>
+;(function (name, definition) {
+  // Come from eventproxy: https://github.com/JacksonTian/eventproxy/blob/master/lib/eventproxy.js#L7
+  
+  // this is considered "safe":
+  var hasDefine = typeof define === 'function';
+  var hasExports = typeof module !== 'undefined' && module.exports;
 
-var EMOJI_MAP = {
-  // Unified: [unified_unicode, title, classname, DoCoMo, KDDI, Softbank, Google]
+  if (hasDefine) {
+    // AMD Module or CMD Module
+    define(definition);
+  } else if (hasExports) {
+    // Node.js Module
+    module.exports = definition();
+  } else {
+    // Assign to common namespaces or simply the global object (window)
+    this[name] = definition();
+  }
+})('jEmoji', function () {
+
+var jEmoji = {};
+
+/**
+ * Emoji code map.
+ *
+ * format: 
+ *   Unified: [unified_unicode, title, classname, DoCoMo, KDDI, Softbank, Google]'
+ * 
+ * @type {Object}
+ */
+var EMOJI_MAP = jEmoji.EMOJI_MAP = {
   "☀": ["U+2600", "black sun with rays", "2600", ["", "U+E63E"], ["", "U+E488"], ["", "U+E04A"], ["󾀀", "U+FE000"]],
   "☁": ["U+2601", "cloud", "2601", ["", "U+E63F"], ["", "U+E48D"], ["", "U+E049"], ["󾀁", "U+FE001"]],
   "☔": ["U+2614", "umbrella with rain drops", "2614", ["", "U+E640"], ["", "U+E48C"], ["", "U+E04B"], ["󾀂", "U+FE002"]],
@@ -719,9 +743,6 @@ var EMOJI_MAP = {
   "🔛": ["U+1F51B", "on with exclamation mark with left right arrow above", "1f51b", ["", "U+E6B8"], ["-", "-"], ["-", "-"], ["󾀙", "U+FE019"]],
   "🔜": ["U+1F51C", "soon with rightwards arrow above", "1f51c", ["", "U+E6B7"], ["-", "-"], ["-", "-"], ["󾀘", "U+FE018"]],
   "🔝": ["U+1F51D", "top with upwards arrow above", "1f51d", ["-", "-"], ["-", "-"], ["", "U+E24C"], ["󾭂", "U+FEB42"]],
-  " ": ["U+2003", "em space", "2003", ["-", "-"], ["", "U+E58C"], ["-", "-"], ["󾭌", "U+FEB4C"]],
-  " ": ["U+2002", "en space", "2002", ["-", "-"], ["", "U+E58D"], ["-", "-"], ["󾭍", "U+FEB4D"]],
-  " ": ["U+2005", "four-per-em space", "2005", ["-", "-"], ["", "U+E58E"], ["-", "-"], ["󾭎", "U+FEB4E"]],
   "✅": ["U+2705", "white heavy check mark", "2705", ["-", "-"], ["", "U+E55E"], ["-", "-"], ["󾭊", "U+FEB4A"]],
   "✊": ["U+270A", "raised fist", "270a", ["", "U+E693"], ["", "U+EB83"], ["", "U+E010"], ["󾮓", "U+FEB93"]],
   "✋": ["U+270B", "raised hand", "270b", ["", "U+E695"], ["", "U+E5A7"], ["", "U+E012"], ["󾮕", "U+FEB95"]],
@@ -739,18 +760,126 @@ var EMOJI_MAP = {
   "👎": ["U+1F44E", "thumbs down sign", "1f44e", ["", "U+E700"], ["", "U+EAD5"], ["", "U+E421"], ["󾮠", "U+FEBA0"]],
   "👐": ["U+1F450", "open hands sign", "1f450", ["", "U+E695"], ["", "U+EAD6"], ["", "U+E422"], ["󾮡", "U+FEBA1"]]
 };
-</div>
 
-<script>
-$(function () {
-  var $text = $('.emojstext');
-  var html = $text.html().trim().replace(/\n/g, '<br/>');
-  html = jEmoji.softbankToUnified(html);
-  html = jEmoji.googleToUnified(html);
-  html = jEmoji.docomoToUnified(html);
-  html = jEmoji.kddiToUnified(html);
-  $text.html(jEmoji.unifiedToHTML(html));
+
+/**
+ * Create map keys rexgep, keys sort by key's length desc.
+ * 
+ * @param {Object} map
+ * @return {RegExp}
+ */
+function _createRegexp(map) {
+  var keys = Object.keys(map);
+  keys.sort(function (a, b) {
+    return b.length - a.length;
+  });
+  return new RegExp('(' + keys.join('|') + ')', 'g');
+}
+
+var EMOJI_RE = null;
+/**
+ * Convert unified code to HTML.
+ * 
+ * @param {String} text
+ * @return {String} html with emoji classname.
+ */
+function unifiedToHTML(text) {
+  if (!EMOJI_RE) {
+    EMOJI_RE = _createRegexp(EMOJI_MAP);
+  }
+  return text.replace(EMOJI_RE, function (_, m) {
+    var em = EMOJI_MAP[m];
+    return '<span class="emoji emoji' + em[2] + '" title="' + em[1] + '"></span>';
+  });
+}
+jEmoji.unifiedToHTML = unifiedToHTML;
+
+var EMOJI_DOCOMO_MAP = {};
+var EMOJI_KDDI_MAP = {};
+var EMOJI_SOFTBANK_MAP = {};
+var EMOJI_GOOGLE_MAP = {};
+var _maps = [EMOJI_DOCOMO_MAP, EMOJI_KDDI_MAP, EMOJI_SOFTBANK_MAP, EMOJI_GOOGLE_MAP];
+for (var k in EMOJI_MAP) {
+  var em = EMOJI_MAP[k];
+  for (var i = 0; i < _maps.length; i++) {
+    var index = i + 3;
+    var code = em[index][0];
+    var map = _maps[i];
+    if (code === '-' || map[code]) { // use first code
+      continue;
+    }
+    map[code] = k;
+  }
+}
+
+var EMOJI_DOCOMO_RE = null;
+/**
+ * Convert DoCoMo code to Unified code.
+ *
+ * @param {String} text
+ * @return {String}
+ */
+function docomoToUnified(text) {
+  if (!EMOJI_DOCOMO_RE) {
+    EMOJI_DOCOMO_RE = _createRegexp(EMOJI_DOCOMO_MAP);
+  }
+  return text.replace(EMOJI_DOCOMO_RE, function (_, m) {
+    return EMOJI_DOCOMO_MAP[m];
+  });
+}
+jEmoji.docomoToUnified = docomoToUnified;
+
+var EMOJI_KDDI_RE = null;
+/**
+ * Convert KDDI code to Unified code.
+ *
+ * @param {String} text
+ * @return {String}
+ */
+function kddiToUnified(text) {
+  if (!EMOJI_KDDI_RE) {
+    EMOJI_KDDI_RE = _createRegexp(EMOJI_KDDI_MAP);
+  }
+  return text.replace(EMOJI_KDDI_RE, function (_, m) {
+    return EMOJI_KDDI_MAP[m];
+  });
+}
+jEmoji.kddiToUnified = kddiToUnified;
+
+var EMOJI_SOFTBANK_RE = null;
+/**
+ * Convert SoftBank code to Unified code.
+ *
+ * @param {String} text
+ * @return {String}
+ */
+function softbankToUnified(text) {
+  if (!EMOJI_SOFTBANK_RE) {
+    EMOJI_SOFTBANK_RE = _createRegexp(EMOJI_SOFTBANK_MAP);
+  }
+  return text.replace(EMOJI_SOFTBANK_RE, function (_, m) {
+    return EMOJI_SOFTBANK_MAP[m];
+  });
+}
+jEmoji.softbankToUnified = softbankToUnified;
+
+var EMOJI_GOOGLE_RE = null;
+/**
+ * Convert Google code to Unified code.
+ *
+ * @param {String} text
+ * @return {String}
+ */
+function googleToUnified(text) {
+  if (!EMOJI_GOOGLE_RE) {
+    EMOJI_GOOGLE_RE = _createRegexp(EMOJI_GOOGLE_MAP);
+  }
+  return text.replace(EMOJI_GOOGLE_RE, function (_, m) {
+    return EMOJI_GOOGLE_MAP[m];
+  });
+}
+jEmoji.googleToUnified = googleToUnified;
+
+return jEmoji;
+
 });
-</script>
-</body>
-</html>
