@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ADC 2013 参会省份与城市统计</title>
+    <script src="./js/datav.js"></script>
+    <script src="./js/chinamap.js"></script>
+<style type="text/css">
+#map {
+  width: 940px;
+}
+.mapTable {
+  background-color: #fff8ed;
+  float: right;
+  width: 290px;
+}
+.mapTable table {
+  width: 290px;
+  table-layout: fixed;
+  cursor: default;
+}
+
+#mapTableArea {
+  width: 28px;
+}
+#mapTableSearch {
+  width: 130px;
+}
+#mapTableTrade {
+  width: 130px;
+}
+#mapTableHead {
+  height: 28px;
+  color: #ff8420;
+}
+#mapTableHead td {
+  text-align: center;
+}
+#mapTableProvinceRow td{
+  overflow: hidden;
+  white-space: nowrap;
+}
+#mapTableCityRow td{
+  overflow: hidden;
+  white-space: nowrap;
+}
+#mapTableProvinceRow td:first-child {
+  overflow: auto;
+  white-space: normal;
+  vertical-align: middle;
+  color: #ff8420;
+}
+#mapTableCityRow td:first-child {
+  overflow: auto;
+  white-space: normal;
+  vertical-align: middle;
+  color: #ff8420;
+}
+.mapTable td {
+  border: 1px solid #fab753;
+  padding: 6px;
+}
+.mapTable ul {
+  padding: 0;
+  margin: 0;
+}
+.mapTable li {
+  list-style-type: none;
+  list-style-position: inside;
+  white-space: nowrap;
+}
+
+.mapTable table {
+  border-collapse: collapse;
+}
+</style>
+  </head>
+
+  <body>
+    <div id="map">
+
+      <div class="mapTable">
+        <table>
+          <colgroup>
+            <col id="mapTableArea" />
+            <col id="mapTableSearch" />
+          </colgroup>
+          <tbody>
+            <tr id = "mapTableHead">
+              <td scope="col">&nbsp;</td>
+              <td scope="col">报名人数排名 Top 10</td>
+            </tr>
+            <tr id = "mapTableProvinceRow">
+              <td>省份</td>
+              <td></td>
+            </tr>
+            <tr id = "mapTableCityRow">
+              <td>城市</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="chart"></div>
+    </div>
+<script>
+var pointColor = "#E67E22";
+var highlightedCityPoint; //raphael obj
+
+var data = {
+  provinces: ['江西', '山东', '湖北', '安徽', '河南', '江西', '山东', '湖北', '安徽', '河南'],
+  cities: [
+    {'name': '上海', index: 1, 'rate': 5},
+    {'name': '北京', index: 3, 'rate': 6},
+    {'name': '杭州', index: 2, 'rate': 25},
+    {'name': '广州', index: 2, 'rate': 25},
+    {'name': '苏州', index: 4, 'rate': 7},
+    {'name': '宁波', index: 10, 'rate': 45},
+    {'name': '克拉玛依', index: 6, 'rate': 55},
+    {'name': '九江', index: 7, 'rate': 65},
+    {'name': '厦门', index: 5, 'rate': 8},
+    {'name': '常州', index: 9, 'rate': 9},
+    {'name': '哈尔滨', index: 7, 'rate': 215},
+    {'name': '无锡', index: 11, 'rate': 1},
+    {'name': '南京', index: 13, 'rate': 10},
+    {'name': '大连', index: 12, 'rate': 2}
+  ],
+  cityMap: {},
+  areaInfo: {
+    '北京': 19612368,
+    '天津': 12938224,
+    '河北': 71854202,
+    '山西': 35712111,
+    '内蒙古': 24706321,
+    '辽宁': 43746323,
+    '吉林': 27462297,
+    '黑龙江': 38312224,
+    '上海': 23019148,
+    '江苏': 78659903,
+    '浙江': 54426891,
+    '安徽': 59500510,
+    '福建': 36894216,
+    '江西': 44567475,
+    '山东': 95793065,
+    '河南': 94023567,
+    '湖北': 57237740,
+    '湖南': 65683722,
+    '广东': 104303132,
+    '广西': 46026629,
+    '海南': 8671518,
+    '重庆': 28846170,
+    '四川': 80418200,
+    '贵州': 34746468,
+    '云南': 45966239,
+    '西藏': 3002166,
+    '陕西': 37327378,
+    '甘肃': 25575254,
+    '青海': 5626722,
+    '宁夏': 6301350,
+    '新疆': 21813334,
+    '香港': 7097600,
+    '澳门': 552300,
+    '台湾': 23162123
+  }
+};
+
+data.cities.sort(function (a, b) {
+  return a.index - b.index;
+});
+
+data.cities.forEach(function (d) {
+  data.cityMap[d.name] = d;
+});
+
+var highlightCityPoint = function (cityName) {
+  var cityData = data.cityMap[cityName];
+  if (!cityData) {
+    return;
+  }
+  highlightedCityPoint = chinamap.createCityPoints([cityData], function (city) {
+    return this.paper.circle(city.coord[0], city.coord[1], 30)
+    .attr({
+      "stroke-width": 4,
+      "stroke": "steelblue",
+      "fill": "#fff"
+    })
+    .data("cityInfo", city)
+    .mouseout(function () {
+      //lowlightCity(city.name);
+      chinamap.fire("cityMouseout", city.name);
+    });
+  })[0];
+  var cityInfo = highlightedCityPoint.data("cityInfo");
+  chinamap.floatTag.html("<p>" + cityInfo.name + "</p>"
+    + "<p>排名：" + cityInfo.index + "</p>"
+    + "<p>占比：" + cityInfo.rate + "%</p>").css("visibility", "visible");
+  chinamap.floatTag.creator.changeLoc(cityInfo.pointLoc);
+};
+
+var lowlightCityPoint = function () {
+  if (typeof highlightedCityPoint !== 'undefined') {
+    highlightedCityPoint.remove();
+    highlightedCityPoint = undefined;
+    chinamap.floatTag.css("visibility", "hidden");
+  }
+};
+
+var fillTable = function () {
+  var getProvince = function () {
+    var html = '';
+    var provinceData = data.provinces.slice(0, 10);
+    html += '<ul>';
+    provinceData.forEach(function (d, i) {
+      html += '<li><span>' + (i + 1) + ' ' + d + '</span></li>';
+    });
+    html += '</ul>';
+    return html;
+  };
+  var getCity = function () {
+    var html = '';
+    var cityData = data.cities.slice(0, 10);
+    html += '<ul>';
+    cityData.forEach(function (d, i) {
+      html += '<li><span>' + (i + 1) + ' ' + d.name + ' ' + d.rate + '%</span></li>';
+    });
+    html += '</ul>';
+    return html;
+  };
+
+  //fill table
+  $("#mapTableProvinceRow").find("td:nth-child(2)").html(getProvince());
+  $("#mapTableCityRow").find("td:nth-child(2)").html(getCity());
+};
+
+var highlightCity = function (cityName) {
+  var cityData = data.cityMap[cityName];
+  if (!cityData) {
+    return;
+  }
+
+  //highlight searchIndex city
+  if (cityData.search <=  10) {
+    searchCityTd.find("span")
+    .css({"color": "black"})
+    .eq(cityData.search - 1)
+    .css({"color": "blue"});
+  }
+};
+
+var lowlightCity = function (cityName) {
+  var cityData = data.cityMap[cityName];
+  if (!cityData) {
+    return;
+  }
+  if (cityData.search <=  10) {
+    searchCityTd.find("span")
+    .css({"color": "black"});
+  }
+};
+
+var w = 630;
+var h = 450;
+$("#chart").css({"width": w});
+
+var chinamap = new Chinamap("chart", {
+  'width': w,
+  'height': h,
+  'geoDataPath': './js/chinaMap/'
+});
+chinamap.setOptions({'showWords': false});
+chinamap.setOptions({'levelChangeable': false});
+chinamap.setOptions({'mapId': 0});
+
+chinamap.setOptions({
+  "colorModel": "gradient",
+  "colors": ["#eee", "#3498DB"]//设置渐变颜色
+});
+//2010 人口统计
+chinamap.setSource(data.areaInfo);
+
+chinamap.renderCallback = function () {
+  var createPoints = function (cityArray, fillColor) {
+    chinamap.createCityPoints(cityArray, function (city) {
+      this.paper.circle(city.coord[0], city.coord[1], 20)
+      .attr({
+          "stroke": "none",
+          "fill": fillColor,
+          "fill-opacity": 0.5
+          })
+      .data("map", this)
+      .data("cityInfo", city)
+      .mouseover(function () {
+        //highlightCity(city.name);
+        chinamap.fire("cityMouseover", city.name);
+      });
+    });
+  };
+
+  createPoints(data.cities, pointColor);
+
+  chinamap.on("cityMouseover", highlightCityPoint);
+  chinamap.on("cityMouseout", lowlightCityPoint);
+  
+  chinamap.createCityPoints(data.cities, function (city) {
+    this.paper.circle(city.coord[0], city.coord[1], 20)
+    .attr({
+      "stroke": "none",
+      "fill": pointColor,
+      "fill-opacity": 0.5
+    })
+    .data("map", this)
+    .data("cityInfo", city)
+    .mouseover(function () {
+      chinamap.fire("cityMouseover", city.name);
+    });
+  });
+          
+  chinamap.floatTag.creator.mouseToFloatTag({x: 10, y: 10});
+
+  fillTable();
+
+  chinamap.on("cityMouseover", highlightCity);
+  chinamap.on("cityMouseout", lowlightCity);
+
+  $("#mapTableCityRow").delegate("span", "mouseover", function () {
+    var cityName = $(this).html().split(' ')[1];
+    chinamap.fire("cityMouseover", cityName);
+  });
+  $("#mapTableCityRow").delegate("span", "mouseout", function () {
+    var cityName = $(this).html().split(' ')[1];
+    chinamap.fire("cityMouseout", cityName);
+  });
+};
+
+chinamap.render();
+</script>
+  </body>
+</html>
