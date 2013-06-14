@@ -8,6 +8,7 @@
   <script src="./js/raphael.js"></script>
   <script src="./js/gender.js"></script>
   <script src="./js/datav.js"></script>
+  <script src="./js/treemap.js"></script>
   <script src="./js/chinamap.js"></script>
 <style type="text/css">
 body {
@@ -39,15 +40,21 @@ body {
   width: 940px;
 }
 
-#chart {
+#map_chart {
   float: left;
 }
+
+#forum_chart {
+  clear: both;
+  width: 100%;
+}
+
 </style>
 </head>
 
 <body>
   <div id="wrap">
-    <div id="chart">
+    <div id="map_chart">
       <div class="head">
         <span>全国参会情况</span>
       </div>
@@ -59,6 +66,10 @@ body {
       </div>
       <div class="gender_chart"></div>
     </div>
+
+    <div id="forum_chart"></div>
+
+    <div id="tag_chart"></div>
   </div>
 <script>
 
@@ -68,12 +79,21 @@ var total = {
   provinces: [
     {name: '浙江', rate: 30}, // 名称和占比
     {name: '北京', rate: 10},
+    {name: '黑龙江', rate: 5},
+    {name: '江苏', rate: 20},
+    {name: '湖南', rate: 10},
+    {name: '广东', rate: 30},
+    {name: '台湾', rate: 5},
     // ...
-    {name: '新疆', rate: 1}
+    {name: '新疆', rate: 8}
   ],
   cities: [
     {name: '杭州', rate: 10}, // 城市和占比
     // ...
+    {name: '北京', rate: 10},
+    {name: '上海', rate: 10},
+    {name: '广州', rate: 10},
+    {name: '乌鲁木齐', rate: 10},
     {name: '东莞', rate: 0.5}
   ],
   cityMap: {},
@@ -84,7 +104,61 @@ var total = {
   tags: [ // 个性标签
     {name: '技术宅', rate: 40}, // 个性标签名称和占比
     // ...
-  ]
+  ],
+  forums: {
+    name: '主论坛报名情况',
+    children: [
+      {name: '业务架构&后端技术', size: 30},
+      {name: '前端技术', size: 20},
+      {name: '大数据技术与应用', size: 10},
+      {name: '无线技术', size: 10},
+      {name: '测试', size: 10},
+      {name: '系统开发与运维', size: 5},
+      {name: '体验设计', size: 5},
+      {name: '搜索', size: 10},
+      {name: '广告', size: 10},
+    ],
+  },
+  tags: {
+    name: '标签统计情况',
+    children: [
+      {name: '业务架构与后端技术', size: 30},
+      {name: '大数据存储于与计算', size: 20},
+      {name: '技术宅', size: 10},
+      {name: '技术发烧友', size: 10},
+      {name: '码农', size: 10},
+      {name: 'nodejs', size: 5},
+      {name: 'FaWave', size: 5},
+      {name: '业务架构与后端技术', size: 30},
+      {name: '大数据存储于与计算', size: 20},
+      {name: '技术宅', size: 10},
+      {name: '技术发烧友', size: 10},
+      {name: '码农', size: 10},
+      {name: 'nodejs', size: 5},
+      {name: 'FaWave', size: 5},
+      {name: '业务架构与后端技术', size: 30},
+      {name: '大数据存储于与计算', size: 20},
+      {name: '技术宅', size: 10},
+      {name: '技术发烧友', size: 10},
+      {name: '码农', size: 10},
+      {name: 'nodejs', size: 5},
+      {name: 'FaWave', size: 5},
+      {name: '业务架构与后端技术', size: 30},
+      {name: '大数据存储于与计算', size: 20},
+      {name: '技术宅', size: 10},
+      {name: '技术发烧友', size: 10},
+      {name: '码农', size: 10},
+      {name: 'nodejs', size: 5},
+      {name: 'FaWave', size: 5},
+      {name: '业务架构与后端技术', size: 30},
+      {name: '大数据存储于与计算', size: 20},
+      {name: '技术宅', size: 10},
+      {name: '技术发烧友', size: 10},
+      {name: '码农', size: 10},
+      {name: 'nodejs', size: 5},
+      {name: 'FaWave', size: 5}
+    ],
+  }
 };
 total.provinceRates = {};
 for (var i = 0; i < total.provinces.length; i++) {
@@ -97,29 +171,6 @@ genderChart0.render(total.allGender);
 
 var pointColor = "#E67E22";
 var highlightedCityPoint; //raphael obj
-
-var data = {
-  cities: [
-    {'name': '上海', rate: 5},
-    {'name': '北京', rate: 6},
-    {'name': '杭州', rate: 25},
-    {'name': '广州', rate: 25},
-    {'name': '苏州', rate: 7},
-    {'name': '宁波', rate: 45},
-    {'name': '克拉玛依', rate: 55},
-    {'name': '九江', rate: 65},
-    {'name': '厦门', rate: 8},
-    {'name': '常州', rate: 9},
-    {'name': '哈尔滨', rate: 215},
-    {'name': '无锡', rate: 1},
-    {'name': '南京', rate: 10},
-    {'name': '大连', rate: 2}
-  ]
-};
-
-total.cities.sort(function (a, b) {
-  return a.rate - b.rate;
-});
 
 total.cityMap = {};
 total.cities.forEach(function (d) {
@@ -161,9 +212,9 @@ var lowlightCityPoint = function () {
 
 var w = 600;
 var h = 450;
-$("#chart").css({"width": w});
+$("#map_chart").css({"width": w});
 
-var chinamap = new Chinamap("chart", {
+var chinamap = new Chinamap("map_chart", {
   'width': w,
   'height': h,
   'geoDataPath': './js/chinaMap/',
@@ -221,6 +272,25 @@ chinamap.renderCallback = function () {
 };
 
 chinamap.render();
+
+// 领域
+DataV.changeTheme("theme1");
+var treemap1 = new Treemap("forum_chart", {
+  width: 940,
+  height: 400
+});
+treemap1.setSource(total.forums);
+treemap1.render();
+
+DataV.changeTheme("theme2");
+var treemap2 = new Treemap("tag_chart", {
+  width: 940,
+  height: 400
+});
+treemap2.setSource(total.tags);
+treemap2.render();
+
+
 </script>
-  </body>
+</body>
 </html>
