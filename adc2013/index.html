@@ -70,13 +70,22 @@ body {
 
 <script>
 function renderChart(total) {
+  total.gender = total.allGender;
+  total.cities = total.city;
+  total.provinces = total.province;
+  total.tags = total.domains;
+
   total.provinceRates = {};
   for (var i = 0; i < total.provinces.length; i++) {
     var p = total.provinces[i];
+    p.rate = parseFloat(p.rate) || 0;
+    p.rate = parseFloat(p.rate.toFixed(2));
     total.provinceRates[p.name] = p.rate;
   }
 
   total.tags.forEach(function (tag) {
+    tag.rate = parseFloat(tag.rate) || 0;
+    tag.rate = parseFloat(tag.rate.toFixed(2));
     tag.size = tag.rate;
   });
 
@@ -93,6 +102,7 @@ function renderChart(total) {
 
   total.cityMap = {};
   total.cities.forEach(function (d) {
+    d.rate = parseFloat(d.rate) || 0;
     total.cityMap[d.name] = d;
   });
 
@@ -115,7 +125,7 @@ function renderChart(total) {
     })[0];
     var cityInfo = highlightedCityPoint.data("cityInfo");
     chinamap.floatTag.html("<p>" + cityInfo.name + "</p>" + 
-      "<p>占比：" + cityInfo.rate + "%</p>").css("visibility", "visible");
+      "<p>占比：" + cityInfo.rate.toFixed(2) + "%</p>").css("visibility", "visible");
     chinamap.floatTag.creator.changeLoc(cityInfo.pointLoc);
   };
 
@@ -190,123 +200,16 @@ function renderChart(total) {
   DataV.changeTheme("theme4");
   var treemap2 = new Treemap("tag_chart", {
     width: 940,
-    height: 500
+    height: 450
   });
   treemap2.setSource(total.tags);
   treemap2.render();
 }
 
 $(function () {
-  var total = {
-    gender: [67, 33], // 全国性别比例，男，女
-    provinces: [
-      {name: '浙江', rate: 30}, // 名称和占比
-      {name: '北京', rate: 10},
-      {name: '黑龙江', rate: 5},
-      {name: '江苏', rate: 20},
-      {name: '湖南', rate: 10},
-      {name: '广东', rate: 30},
-      {name: '台湾', rate: 5},
-      // ...
-      {name: '新疆', rate: 8}
-    ],
-    cities: [
-      {name: '杭州', rate: 10}, // 城市和占比
-      // ...
-      {name: '北京', rate: 10},
-      {name: '上海', rate: 10},
-      {name: '广州', rate: 10},
-      {name: '乌鲁木齐', rate: 10},
-      {name: '东莞', rate: 0.5}
-    ],
-    tags: [
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5},
-      {name: '业务架构与后端技术', rate: 30},
-      {name: '大数据存储于与计算', rate: 20},
-      {name: '技术宅', rate: 10},
-      {name: '技术发烧友', rate: 10},
-      {name: '码农', rate: 10},
-      {name: 'nodejs', rate: 5},
-      {name: 'FaWave', rate: 5}
-    ]
-  };
-
-  renderChart(total);
-
+  $.getJSON('./1.json', function (total) {
+    renderChart(total);
+  });
 });
 
 </script>
