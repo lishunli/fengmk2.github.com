@@ -31,6 +31,7 @@ body {
 .gender_chart {
   padding: 10px;
   margin: 10px;
+  margin-top: 50px;
   height: 235px;
   width: 300px;
   overflow: hidden;
@@ -44,7 +45,7 @@ body {
   float: left;
 }
 
-#forum_chart {
+#forum_chart, #tag_chart {
   clear: both;
   width: 100%;
 }
@@ -56,26 +57,22 @@ body {
   <div id="wrap">
     <div id="map_chart">
       <div class="head">
-        <span>全国参会情况</span>
+        <span>五湖四海</span>
       </div>
     </div>
 
     <div class="gender_box">
       <div class="head">
-        <span>全国性别比例</span>
+        <span>男女比例</span>
       </div>
       <div class="gender_chart"></div>
     </div>
-
-    <div id="forum_chart"></div>
-
     <div id="tag_chart"></div>
   </div>
 <script>
 
 var total = {
-  allGender: [75, 25], // 全国性别比例，男，女
-  hangzhouGender: [85, 15], // 杭州性别比例，男，女
+  gender: [67, 33], // 全国性别比例，男，女
   provinces: [
     {name: '浙江', rate: 30}, // 名称和占比
     {name: '北京', rate: 10},
@@ -96,78 +93,58 @@ var total = {
     {name: '乌鲁木齐', rate: 10},
     {name: '东莞', rate: 0.5}
   ],
-  cityMap: {},
-  domains: [ // 关注技术领域
-    {name: '业务架构与后端技术', rate: 20}, // 技术领域名称和占比
-    // ...
-  ],
-  tags: [ // 个性标签
-    {name: '技术宅', rate: 40}, // 个性标签名称和占比
-    // ...
-  ],
-  forums: {
-    name: '主论坛报名情况',
-    children: [
-      {name: '业务架构&后端技术', size: 30},
-      {name: '前端技术', size: 20},
-      {name: '大数据技术与应用', size: 10},
-      {name: '无线技术', size: 10},
-      {name: '测试', size: 10},
-      {name: '系统开发与运维', size: 5},
-      {name: '体验设计', size: 5},
-      {name: '搜索', size: 10},
-      {name: '广告', size: 10},
-    ],
-  },
-  tags: {
-    name: '标签统计情况',
-    children: [
-      {name: '业务架构与后端技术', size: 30},
-      {name: '大数据存储于与计算', size: 20},
-      {name: '技术宅', size: 10},
-      {name: '技术发烧友', size: 10},
-      {name: '码农', size: 10},
-      {name: 'nodejs', size: 5},
-      {name: 'FaWave', size: 5},
-      {name: '业务架构与后端技术', size: 30},
-      {name: '大数据存储于与计算', size: 20},
-      {name: '技术宅', size: 10},
-      {name: '技术发烧友', size: 10},
-      {name: '码农', size: 10},
-      {name: 'nodejs', size: 5},
-      {name: 'FaWave', size: 5},
-      {name: '业务架构与后端技术', size: 30},
-      {name: '大数据存储于与计算', size: 20},
-      {name: '技术宅', size: 10},
-      {name: '技术发烧友', size: 10},
-      {name: '码农', size: 10},
-      {name: 'nodejs', size: 5},
-      {name: 'FaWave', size: 5},
-      {name: '业务架构与后端技术', size: 30},
-      {name: '大数据存储于与计算', size: 20},
-      {name: '技术宅', size: 10},
-      {name: '技术发烧友', size: 10},
-      {name: '码农', size: 10},
-      {name: 'nodejs', size: 5},
-      {name: 'FaWave', size: 5},
-      {name: '业务架构与后端技术', size: 30},
-      {name: '大数据存储于与计算', size: 20},
-      {name: '技术宅', size: 10},
-      {name: '技术发烧友', size: 10},
-      {name: '码农', size: 10},
-      {name: 'nodejs', size: 5},
-      {name: 'FaWave', size: 5}
-    ],
-  }
+  tags: [
+    {name: '业务架构与后端技术', size: 30},
+    {name: '大数据存储于与计算', size: 20},
+    {name: '技术宅', size: 10},
+    {name: '技术发烧友', size: 10},
+    {name: '码农', size: 10},
+    {name: 'nodejs', size: 5},
+    {name: 'FaWave', size: 5},
+    {name: '业务架构与后端技术', size: 30},
+    {name: '大数据存储于与计算', size: 20},
+    {name: '技术宅', size: 10},
+    {name: '技术发烧友', size: 10},
+    {name: '码农', size: 10},
+    {name: 'nodejs', size: 5},
+    {name: 'FaWave', size: 5},
+    {name: '业务架构与后端技术', size: 30},
+    {name: '大数据存储于与计算', size: 20},
+    {name: '技术宅', size: 10},
+    {name: '技术发烧友', size: 10},
+    {name: '码农', size: 10},
+    {name: 'nodejs', size: 5},
+    {name: 'FaWave', size: 5},
+    {name: '业务架构与后端技术', size: 30},
+    {name: '大数据存储于与计算', size: 20},
+    {name: '技术宅', size: 10},
+    {name: '技术发烧友', size: 10},
+    {name: '码农', size: 10},
+    {name: 'nodejs', size: 5},
+    {name: 'FaWave', size: 5},
+    {name: '业务架构与后端技术', size: 30},
+    {name: '大数据存储于与计算', size: 20},
+    {name: '技术宅', size: 10},
+    {name: '技术发烧友', size: 10},
+    {name: '码农', size: 10},
+    {name: 'nodejs', size: 5},
+    {name: 'FaWave', size: 5}
+  ]
 };
+
 total.provinceRates = {};
 for (var i = 0; i < total.provinces.length; i++) {
   var p = total.provinces[i];
   total.provinceRates[p.name] = p.rate;
 }
 
+total.tags = {
+  name: '码农标签',
+  children: total.tags
+};
+
 var genderChart0 = new GenderChart($('.gender_chart:eq(0)'));
-genderChart0.render(total.allGender);
+genderChart0.render(total.gender);
 
 var pointColor = "#E67E22";
 var highlightedCityPoint; //raphael obj
@@ -191,14 +168,12 @@ var highlightCityPoint = function (cityName) {
     })
     .data("cityInfo", city)
     .mouseout(function () {
-      //lowlightCity(city.name);
       chinamap.fire("cityMouseout", city.name);
     });
   })[0];
   var cityInfo = highlightedCityPoint.data("cityInfo");
-  chinamap.floatTag.html("<p>" + cityInfo.name + "</p>"
-    + "<p>排名：" + cityInfo.index + "</p>"
-    + "<p>占比：" + cityInfo.rate + "%</p>").css("visibility", "visible");
+  chinamap.floatTag.html("<p>" + cityInfo.name + "</p>" + 
+    "<p>占比：" + cityInfo.rate + "%</p>").css("visibility", "visible");
   chinamap.floatTag.creator.changeLoc(cityInfo.pointLoc);
 };
 
@@ -210,17 +185,16 @@ var lowlightCityPoint = function () {
   }
 };
 
-var w = 600;
-var h = 450;
+var w = 500;
+var h = 400;
 $("#map_chart").css({"width": w});
 
 var chinamap = new Chinamap("map_chart", {
-  'width': w,
-  'height': h,
-  'geoDataPath': './js/chinaMap/',
+  width: w,
+  height: h,
+  geoDataPath: './js/chinaMap/',
   showWords: false,
 });
-// chinamap.setOptions({'showWords': false});
 chinamap.setOptions({'levelChangeable': false});
 chinamap.setOptions({'mapId': 0});
 
@@ -228,7 +202,7 @@ chinamap.setOptions({
   colorModel: "gradient",
   colors: ["#eee", "#3498DB"]//设置渐变颜色
 });
-//2010 人口统计
+
 chinamap.setSource(total.provinceRates);
 
 chinamap.renderCallback = function () {
@@ -243,7 +217,6 @@ chinamap.renderCallback = function () {
       .data("map", this)
       .data("cityInfo", city)
       .mouseover(function () {
-        //highlightCity(city.name);
         chinamap.fire("cityMouseover", city.name);
       });
     });
@@ -270,27 +243,15 @@ chinamap.renderCallback = function () {
           
   chinamap.floatTag.creator.mouseToFloatTag({x: 10, y: 10});
 };
-
 chinamap.render();
 
-// 领域
-DataV.changeTheme("theme1");
-var treemap1 = new Treemap("forum_chart", {
-  width: 940,
-  height: 400
-});
-treemap1.setSource(total.forums);
-treemap1.render();
-
-DataV.changeTheme("theme2");
+DataV.changeTheme("theme4");
 var treemap2 = new Treemap("tag_chart", {
   width: 940,
   height: 400
 });
 treemap2.setSource(total.tags);
 treemap2.render();
-
-
 </script>
 </body>
 </html>

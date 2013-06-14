@@ -74,7 +74,7 @@
           floatTag.html('<div style="text-align: center; color:#fff;">' +
             treemapNode.name + '</div>' +
             '<div style="text-align: center; color: #fff;">' +
-            treemapNode.value + '</div>');
+            treemapNode.value + '%</div>');
         }
       };
       this.setOptions(options);
@@ -547,7 +547,7 @@
         "borderStyle": "solid",
         "borderColor": "#d6d6d6",
         "overflow": "hidden",
-        "fontFamily": '黑体',
+        // "fontFamily": '黑体',
         "position": "absolute",
         "textIndent": "2px",
         "backgroundColor": jqNode.color,
@@ -589,7 +589,7 @@
         //level 1
         jqNode.css("cursor", "pointer");
         jqNode.clone().insertBefore(jqNode).css("opacity", 0.01);
-        jqNode.click({"treemap": this, "treemapNode": d, "jqueryNode": jqNode}, goIn);
+        // jqNode.click({"treemap": this, "treemapNode": d, "jqueryNode": jqNode}, goIn);
         jqNode.mouseover(level1HoverIn(level1NodeArray.length - 1, level1NodeArray));
         jqNode.mouseout(level1HoverOut(level1NodeArray));
         jqNode.mousemove(conf.customEvent.mousemove);
@@ -645,7 +645,7 @@
       lastGt;
 
     for (var i = 0, l = this.selectedTreeNodes.length; i < l; i++) {
-      var a = $("<a></a>").html(this.selectedTreeNodes[i].name);
+      var a = $("<div class='head'><a>" + this.selectedTreeNodes[i].name + "</a></div>");
       if (i < l - 1) {
         a.css({
           color: "blue",
