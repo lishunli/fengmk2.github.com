@@ -95,6 +95,7 @@
 ## Articles
 
 * [Blog/2013](./blog/2013)
+ * [让 ejs 更加快 | Let ejs faster with options._with = false](./benchmark/ejs/with_false_better_than_true.html)
  * [Use Blanket.js instead of jscover](./blog/2013/05/blanketjs-jscoverage.html)
  * [Generate cobertura-xml report with mocha](./blog/2013/02/cobertura-xml-with-mocha.html) 
  * [nodejs domain module hello world and benchmark](./blog/2013/03/domain-helloworld-benchmark.html)
