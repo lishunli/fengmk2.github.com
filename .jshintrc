@@ -32,5 +32,6 @@
   "white": true,
   "indent": 2,
   "expr": true,
+  "multistr": true,
   "onevar": false
 }
