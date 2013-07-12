@@ -74,7 +74,7 @@
           floatTag.html('<div style="text-align: center; color:#fff;">' +
             treemapNode.name + '</div>' +
             '<div style="text-align: center; color: #fff;">' +
-            treemapNode.value + '%</div>');
+            _DataMap[treemapNode.name] + '%</div>');
         }
       };
       this.setOptions(options);
@@ -225,6 +225,7 @@
    * ```
    * @param {Array|Object} source json or 2-d array
    */
+  var _DataMap = {};
   Treemap.prototype.setSource = function (source) {
     if (_.isArray(source)) {
       this.rawData = this._arrayToJson(source);
@@ -232,6 +233,11 @@
       this.rawData = source;
     }
     this.source = this._remapSource(this.rawData);
+    var items = this.source[0].children;
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      _DataMap[item.name] = item.rate;
+    }
     this.selectedTreeNodes = [this.source[0]];
   };
 

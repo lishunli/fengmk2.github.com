@@ -80,13 +80,25 @@ function renderChart(total) {
     var p = total.provinces[i];
     p.rate = parseFloat(p.rate) || 0;
     p.rate = parseFloat(p.rate.toFixed(2));
+    if (p.name === '浙江') {
+      p.rate = p.rate * 0.1;
+    }
+    if (p.name === '上海') {
+      p.rate = p.rate * 0.5;
+    }
     total.provinceRates[p.name] = p.rate;
   }
 
   total.tags.forEach(function (tag) {
     tag.rate = parseFloat(tag.rate) || 0;
     tag.rate = parseFloat(tag.rate.toFixed(2));
-    tag.size = tag.rate;
+    var size = tag.rate;
+    if (size > 2) {
+      size = 2 + size - parseInt(size);
+    } else if (size < 1) {
+      size += 1;
+    }
+    tag.size = size;
   });
 
   total.tags = {
@@ -162,10 +174,10 @@ function renderChart(total) {
       chinamap.createCityPoints(cityArray, function (city) {
         this.paper.circle(city.coord[0], city.coord[1], 20)
         .attr({
-            "stroke": "none",
-            "fill": fillColor,
-            "fill-opacity": 0.5
-            })
+          "stroke": "none",
+          "fill": fillColor,
+          "fill-opacity": 0.5
+        })
         .data("map", this)
         .data("cityInfo", city)
         .mouseover(function () {
