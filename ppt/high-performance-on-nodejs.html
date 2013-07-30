@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  
+  <title> Node.js 高性能编程 </title>
+  
+  <meta name="description" content="A jQuery library for modern HTML presentations">
+  <meta name="author" content="Caleb Troughton">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+  
+  <!-- Core and extension CSS files -->
+  <link rel="stylesheet" href="./deck.js/core/deck.core.css">
+  <link rel="stylesheet" href="./deck.js/extensions/goto/deck.goto.css">
+  <link rel="stylesheet" href="./deck.js/extensions/menu/deck.menu.css">
+  <link rel="stylesheet" href="./deck.js/extensions/navigation/deck.navigation.css">
+  <link rel="stylesheet" href="./deck.js/extensions/status/deck.status.css">
+  <link rel="stylesheet" href="./deck.js/extensions/hash/deck.hash.css">
+  <link rel="stylesheet" href="./style.css">
+  
+  <!-- Theme CSS files (menu swaps these out) -->
+  <link rel="stylesheet" id="style-theme-link" href="./deck.js/themes/style/neon.css">
+  <link rel="stylesheet" id="transition-theme-link" href="./deck.js/themes/transition/horizontal-slide.css">
+  
+  <link rel="stylesheet" href="http://fengmk2.github.com/css/prettify.css" />
+  <script src="http://fengmk2.github.com/js/jquery-1.7.min.js"></script>
+  <script src="http://fengmk2.github.com/js/prettify.js"></script>
+
+  <script src="./deck.js/modernizr.custom.js"></script>
+</head>
+
+<body class="deck-container">
+
+
+<section class="slide"><h1>Node.js 高性能编程</h1>
+<p>High Performance Node.js</p>
+</section>
+
+<section class="slide"><h2>Who am I? 我是谁？</h2>
+<h3>Alibaba Data EDP</h3>
+<h3>阿里巴巴数据平台EDP，花名@苏千</h3>
+<h3>Chinese nodejs community: <a href="http://cnodejs.org">cnodejs.org</a></h3>
+<hr/>
+
+<h3>Github: @<a href="https://github.com/fengmk2/">fengmk2</a></h3>
+<h3>Blog: <a href="http://fengmk2.github.com">http://fengmk2.github.com</a></h3>
+<h3>Twitter: @fengmk2</h3>
+<h3>Weibo: @Python发烧友 , @FaWave</h3>
+<blockquote>
+<p>一切都是最好的安排</p>
+</blockquote>
+</section>
+
+<section class="slide"><h2>内容大纲</h2>
+<h3>* Node.js的执行速度</h3>
+<h3>* 异步, 非阻塞</h3>
+<h3>* callback 潜规则</h3>
+<h3>* fs</h3>
+<h3>* http</h3>
+<h3>* Stream</h3>
+<h3>* HSF</h3>
+<h3>* BDD</h3>
+</section>
+
+<section class="slide"><h2>Node.js的执行速度</h2>
+<p>根据 <a href="http://fengmk2.github.io/blog/2011/fibonacci/nodejs-python-php-ruby-lua.html">fibonacci(40) benchmark</a> 结果</p>
+<p><img src="http://nfs.nodeblog.org/5/6/56bf605d0ef507d73426a7c2b5c439d3.png" alt="1"></p>
+</section>
+
+<section class="slide"><h2>Loop 循环</h2>
+<p>能用 for 的情况下, 就不使用 forEach, 性能实在差异太大: <a href="http://fengmk2.github.io/benchmark/for_forEach.js">benchmark/for_forEach.js</a></p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>ops/sec </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>for (var i = 0; i &lt; datas20.length; i++)</td>
+<td>12,279,015</td>
+</tr>
+<tr>
+<td>datas20.forEach()</td>
+<td>581,433</td>
+</tr>
+<tr>
+<td>for (var i = 0; i &lt; datas200.length; i++)</td>
+<td>1,740,121</td>
+</tr>
+<tr>
+<td>datas200.forEach()</td>
+<td>69,918</td>
+</tr>
+<tr>
+<td>for (var i = 0; i &lt; datas500.length; i++)</td>
+<td>730,896</td>
+</tr>
+<tr>
+<td>datas500.forEach()</td>
+<td>28,324</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-bash">$ node benchmark/for_forEach.js 
+
+for (var i = 0; i &lt; datas20.length; i++) x 12,279,015 ops/sec ±2.04% (86 runs sampled)
+datas20.forEach() x 581,433 ops/sec ±2.35% (91 runs sampled)
+
+for (var i = 0; i &lt; datas200.length; i++) x 1,740,121 ops/sec ±0.49% (91 runs sampled)
+datas200.forEach() x 69,918 ops/sec ±0.68% (96 runs sampled)
+
+for (var i = 0; i &lt; datas500.length; i++) x 730,896 ops/sec ±0.35% (96 runs sampled)
+datas500.forEach() x 28,324 ops/sec ±0.68% (94 runs sampled)
+
+Fastest is for (var i = 0; i &lt; datas20.length; i++)</code></pre>
+</section>
+
+<section class="slide"><h2>异步, 非阻塞</h2>
+<h3>IO的阻塞和非阻塞</h3>
+<p><img src="http://nfs.nodeblog.org/4/7/4764c351daae7e116c675edb4d97f30d.png" alt="2">
+<img src="http://nfs.nodeblog.org/1/0/10298b03dcb7771edaf3577d59a4931f.png" alt="3"></p>
+</section>
+
+<section class="slide"><h2>异步IO</h2>
+<p><img src="http://nfs.nodeblog.org/3/4/34ab7f32596b42fce5178a019b93767b.png" alt="4"></p>
+</section>
+
+<section class="slide"><h2>一切都是异步非阻塞IO</h2>
+<p>在 Node.js 中, 文件IO和网络IO都是非阻塞的.</p>
+<p><img src="http://nfs.nodeblog.org/c/e/cef55da90897424bb178f6e8dac23a67.png" alt="5"></p>
+</section>
+
+<section class="slide"><h2>callback(err, data1[, data2, ...]) 潜规则</h2>
+<h3>* 异步编程必然会出现callback</h3>
+<h3>* 统一的callback参数约定</h3>
+<h3>* go 语言也是类似的约定: 返回值最后一个是err</h3>
+</section>
+
+<section class="slide"><h2>Node.js: function callback(err, data)</h2>
+<pre><code class="lang-js">mysql.query(sql, function (err, rows) {
+  if (err) {
+    logger.error(err);
+    // handle error logic
+  } else {
+    // handle rows
+  }
+});</code></pre>
+</section>
+
+<section class="slide"><h2>Go: func Open(name string) (file *File, err error)</h2>
+<p><a href="http://blog.golang.org/error-handling-and-go">Error handling and Go</a></p>
+<pre><code class="lang-go">f, err := os.Open(&quot;filename.ext&quot;)
+if err != nil {
+    log.Fatal(err)
+}
+// do something with the open *File f</code></pre>
+</section>
+
+<section class="slide"><h2>fs: 只使用异步接口</h2>
+<p>判断文件是否存在</p>
+<pre><code class="lang-js">fs.exists(&#39;/etc/passwd&#39;, function (exists) {
+  console.log(exists ? &quot;it&#39;s there&quot; : &quot;no passwd!&quot;);
+});</code></pre>
+<h3>读取配置文体</h3>
+<p>除了你明确知道不会影响性能的情况下才使用同步方式</p>
+<pre><code class="lang-js">var config = fs.readFileSync(__dirname + &#39;/config.ini&#39;, &#39;utf-8&#39;);
+// covert ini config to js object</code></pre>
+</section>
+
+<section class="slide"><h2>http Server</h2>
+<h3>通常, 都会以最简单的 Hello World 来展示Node.js 写 http server 是如何快速高效的:</h3>
+<pre><code class="lang-js">var http = require(&#39;http&#39;);
+
+http.createServer(function (req, res) {
+  res.writeHead(200, {&#39;Content-Type&#39;: &#39;text/plain&#39;});
+  res.end(&#39;Hello World\n&#39;);
+}).listen(1337, &quot;127.0.0.1&quot;);
+
+console.log(&#39;Server running at http://127.0.0.1:1337/&#39;);</code></pre>
+</section>
+
+<section class="slide"><h2>http hello world benchmark</h2>
+<p><a href="https://github.com/onlytiancai/codesnip/blob/master/c/study/2/README.md">http hello world 性能测试大比评</a></p>
+<p><img src="http://nfs.nodeblog.org/6/7/67d91334cea275041c662af889a71b57.png" alt="http benchmark"></p>
+<p>Node.js的各个版本的: <a href="http://fengmk2.github.io/blog/helloworld-benchmark.html">Nodejs &quot;Hello world&quot; benchmark</a></p>
+</section>
+
+<section class="slide"><h2>超时, 网络异常处理</h2>
+<p><a href="https://github.com/TBEDP/urllib/blob/master/lib/urllib.js#L211">urllib.js#L211</a></p>
+<pre><code class="lang-js">  var timeout = args.timeout;
+  var __err = null;
+
+  timer = setTimeout(function () {
+    timer = null;
+    __err = new Error(&#39;Request timeout for &#39; + timeout + &#39;ms.&#39;);
+    __err.name = &#39;RequestTimeoutError&#39;;
+    req.abort();
+  }, timeout);
+
+  req.once(&#39;error&#39;, function (err) {
+    if (!__err &amp;&amp; err.name === &#39;Error&#39;) {
+      err.name = &#39;RequestError&#39;;
+    }
+    done(__err || err);
+  });</code></pre>
+</section>
+
+<section class="slide"><h2>Stream: 流式编程</h2>
+<p>我们常用的 <code>cat</code> 命令</p>
+<pre><code class="lang-bash">$ cat
+Hello
+Hello
+World
+World</code></pre>
+</section>
+
+<section class="slide"><h2>使用 Node.js 的 Stream 概念能轻松模拟</h2>
+<pre><code class="lang-js">process.stdin.pipe(process.stdout);</code></pre>
+<h2>gzip 压缩一个文件</h2>
+<pre><code class="lang-js">var r = fs.createReadStream(&#39;file.txt&#39;);
+var z = zlib.createGzip();
+var w = fs.createWriteStream(&#39;file.txt.gz&#39;);
+r.pipe(z).pipe(w);</code></pre>
+<h2><a href="https://github.com/fengmk2/formstream">formstream</a> 表单上传文件</h2>
+<pre><code class="lang-js">var formstream = require(&#39;formstream&#39;);
+var http = require(&#39;http&#39;);
+
+var form = formstream().file(&#39;file&#39;, &#39;./logo.png&#39;, &#39;upload-logo.png&#39;);
+
+var options = {
+  method: &#39;POST&#39;,
+  host: &#39;upload.cnodejs.net&#39;,
+  path: &#39;/store&#39;,
+  headers: form.headers()
+};
+var req = http.request(options, function (res) {
+  console.log(&#39;Status: %s&#39;, res.statusCode);
+  res.on(&#39;data&#39;, function (data) {
+    console.log(data.toString());
+  });
+});
+
+form.pipe(req);</code></pre>
+</section>
+
+<section class="slide"><h2>HSF: 淘宝hsf的node版本</h2>
+<p><a href="http://gitlab.alibaba-inc.com/node-hsf/tree/master">node-hsf</a>: 淘宝hsf的node版本，实现了provider和consumer的主要功能。</p>
+<ul>
+<li>序列化反序列化模块通过C++模块实现</li>
+<li>网络传输部分node实现。</li>
+<li>同时在hsf的基础上扩展了node之间互相调用的JSON序列化方式，性能有极大提升。</li>
+<li>支持Java基本类型和自定义类型</li>
+</ul>
+<h2>Node.js 调用 Java HSF 服务</h2>
+<pre><code class="lang-js">var hsf = require(&#39;hsf&#39;);
+var client = hsf.createClient({
+  configSvr: &#39;config server host&#39;,
+  // ...
+});
+// 创建一个consumer，可以同时创建多个consumer来调用多个HSF服务
+var testConsumer = client.createConsumer(&#39;com.taobao.hsfcpp.service.nodejs&#39;, &#39;1.0.0&#39;);
+
+// 调用服务端的 plus 方法，第二个参数是调用 plus 方法时的参数数组，相当于调用 plus(3, 4);
+testConsumer.invoke(&#39;plus&#39;, [3, 4], function (err, data) {
+  // callback
+});</code></pre>
+<h2><a href="http://gitlab.alibaba-inc.com/node-hsf/blob/master/benchmark.md">Benchmark</a></h2>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>concurrent</th>
+<th>qps</th>
+<th>rt (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>http hello world</td>
+<td>50</td>
+<td>9919</td>
+<td>10</td>
+</tr>
+<tr>
+<td>http hello world</td>
+<td>100</td>
+<td>10856</td>
+<td>10</td>
+</tr>
+<tr>
+<td>hsf ping echo</td>
+<td>10</td>
+<td>16200</td>
+<td>6.16</td>
+</tr>
+<tr>
+<td>hsf call (json)</td>
+<td>10</td>
+<td>13500</td>
+<td>7.39</td>
+</tr>
+<tr>
+<td>hsf call (hessian)</td>
+<td>10</td>
+<td>7800</td>
+<td>12.79</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section class="slide"><h2>BDD: Benchmark Driven Development</h2>
+<p>BDD是如何工作的?</p>
+<h3>例如: 我想写世界上最快的函数</h3>
+<pre><code class="lang-js">function benchmark() {
+  // just empty
+}</code></pre>
+</section>
+
+<section class="slide"><h2>写一个最简单的基准测试来测试它</h2>
+<pre><code class="lang-js">while (true) {
+  var start = Date.now();
+  benchmark();
+  var duration = Date.now() - start;
+  console.log(duration);
+}</code></pre>
+</section>
+
+<section class="slide"><h2>厄, 它完全没有用啊!</h2>
+<p>对的, 它就是基准的开始, 我们就在它里面加上我们的代码逻辑</p>
+<pre><code class="lang-js">function arrayToObject(arr) {
+  var obj = {};
+  for (var i = 0; i &lt; arr.length; i++) {
+    var item = arr[i];
+    obj[item[0]] = item[1];
+  }
+  return obj;
+}</code></pre>
+<p>然后测试它</p>
+<pre><code>while (true) {
+  var start = Date.now();
+  arrayToObject([[&#39;foo&#39;, 1], [&#39;bar&#39;, 2]]);
+  var duration = Date.now() - start;
+  console.log(duration);
+}</code></pre>
+</section>
+
+<section class="slide"><h2>BDD 的实践证明</h2>
+<p><a href="https://github.com/felixge/faster-than-c">Faster than C? Parsing binary data in JavaScript.</a>, video: <a href="http://2012.jsconf.eu/speaker/2012/09/05/faster-than-c-parsing-node-js-streams-.html">Faster than C? Parsing Node.js Streams!</a></p>
+<h3>* Performance is not a tool.</h3>
+<h3>* Performance is hard work &amp; data analysis.</h3>
+<p><img src="http://nfs.nodeblog.org/5/3/530efa642be76cbde2ad5682b766cdc7.png" alt="1"></p>
+</section>
+
+<section class="slide"><h1>知乎者也 Q&amp;A</h1>
+</section>
+
+<section class="slide"><h2>参考文章</h2>
+<ul>
+<li><a href="http://blog.caustik.com/2012/04/08/scaling-node-js-to-100k-concurrent-connections/">Scaling node.js to 100k concurrent connections!</a></li>
+<li><a href="http://blog.caustik.com/2012/04/11/escape-the-1-4gb-v8-heap-limit-in-node-js/">Escape the 1.4GB V8 heap limit in Node.js!</a></li>
+<li><a href="https://github.com/felixge/faster-than-c">Faster than C? Parsing binary data in JavaScript.</a></li>
+<li><a href="http://2012.jsconf.eu/speaker/2012/09/05/faster-than-c-parsing-node-js-streams-.html">Faster than C? Parsing Node.js Streams!</a></li>
+<li><a href="https://github.com/substack/stream-handbook">how to write node programs with streams</a></li>
+<li><a href="https://github.com/onlytiancai/codesnip/blob/master/c/study/2/README.md">http hello world 性能测试大比评</a></li>
+<li><a href="http://www.techempower.com/benchmarks/">Web Framework Benchmarks</a></li>
+<li><a href="http://fengmk2.github.io/blog/helloworld-benchmark.html">Nodejs &quot;Hello world&quot; benchmark</a></li>
+</ul>
+</section>
+
+
+<p class="deck-status">
+  <span class="deck-status-current"></span>
+  /
+  <span class="deck-status-total"></span>
+</p>
+
+<form action="." method="get" class="goto-form">
+  <label for="goto-slide">Go to slide:</label>
+  <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+  <datalist id="goto-datalist"></datalist>
+  <input type="submit" value="Go">
+</form>
+
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- Deck Core and extensions -->
+<script src="./deck.js/core/deck.core.js"></script>
+<script src="./deck.js/extensions/hash/deck.hash.js"></script>
+<script src="./deck.js/extensions/menu/deck.menu.js"></script>
+<script src="./deck.js/extensions/goto/deck.goto.js"></script>
+<script src="./deck.js/extensions/status/deck.status.js"></script>
+<script src="./deck.js/extensions/navigation/deck.navigation.js"></script>
+
+<!-- Specific to this page -->
+<script>
+$(function() {
+  // Deck initialization
+  $.deck('.slide');
+  $('pre code').parent().addClass('prettyprint');
+  prettyPrint();
+});
+</script>
+
+</body>
+</html>

@@ -60,6 +60,8 @@
 
 ## Slides
 
+* [Node.js 高性能编程 | High Performance Node.js](./ppt/high-performance-on-nodejs.html)
+* [Node HBase Client](./ppt/nodejs_hbase_client.html): Asynchronous HBase client for Node.
 * [Nodejs 快速开发Web产品](./ppt/nodejs-web-dev.html)
 * [Code traps in Nodejs | 在Nodejs上踩过的坑](./ppt/hujs.html) at [沪JS 2012](http://www.hujs.org/)
 * [我的 nodejs 编程规范](./ppt/nodejs_programming_style.html)
@@ -114,7 +116,8 @@
 
 ## Events
 
-* [沪JS](http://www.hujs.org/): 九月14－16日，上海, 一个为中国Javascript和Node.js开发者社区举办的会议
+* [京JS](http://jingjs.org/): 2013 9 - 10, NOVEMBER, A two day conference in Beijing for the Chinese JavaScript and Node.js community. (一个在北京举办的为期二天，为中国JavaScript和Node.js研发者社区举办的国际性技术大会)
+* [沪JS](http://www.hujs.org/): 2012 九月14－16日，上海, 一个为中国Javascript和Node.js开发者社区举办的会议
 
 [![gleen&troy&goddy&jackson&mk2](http://ww3.sinaimg.cn/bmiddle/6cfc7910jw1dx6wgxck38j.jpg)](http://ww3.sinaimg.cn/large/6cfc7910jw1dx6wgxck38j.jpg)
 
