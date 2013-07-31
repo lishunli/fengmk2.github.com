@@ -31,6 +31,7 @@ High Performance Node.js
 ### * Stream
 ### * HSF
 ### * BDD
+### * 阿里内的Node.js
 
 ---
 
@@ -361,6 +362,24 @@ while (true) {
 ### * Performance is hard work & data analysis.
 
 ![1](http://nfs.nodeblog.org/5/3/530efa642be76cbde2ad5682b766cdc7.png)
+
+---
+
+## 阿里内的Node.js
+
+### * ali npm: http://npm.alibaba-inc.com/
+
+```bash
+$ npm install -g tnpm
+```
+
+![1](http://nfs.nodeblog.org/1/9/19267f050ff6c37bc54b085f70c037f2.png)
+
+---
+
+## 509 个模块
+
+![2](http://nfs.nodeblog.org/e/0/e06de53086205af11d306c33c22f15fb.png)
 
 ---
 
