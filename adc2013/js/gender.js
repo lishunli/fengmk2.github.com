@@ -60,6 +60,10 @@
     var total = data[0] + data[1];
     var male = Math.round(data[0] / total * 100);
     var female = 100 - male;
+    if (total === 0) {
+      male = 0;
+      female = 0;
+    }
     var width = this.R.width();
     var height = this.R.height();
     var r = Raphael(this.R[0], width, height);

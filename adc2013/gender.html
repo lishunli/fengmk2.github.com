@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>ADC 2013 参会性别统计</title>
-  <script src="http://adc.alibabatech.org/bundles/devcarnival/js/jquery-1.9.1.min.js"></script>
+  <script src="http://cdn.staticfile.org/jquery/2.0.3/jquery.min.js"></script>
   <script src="./js/raphael.min.js"></script>
   <script src="./js/gender.js"></script>
   <style type="text/css">
@@ -80,6 +80,8 @@
 <div class="gender_chart">
 </div>
 
+<div class="gender_chart">
+</div>
 <div class="gender_chart">
 </div>
 <div class="gender_chart">
@@ -168,6 +170,8 @@ gender25.render([85, 15]);
 
 var gender26 = new GenderChart($('.gender_chart:eq(26)'));
 gender26.render([75, 25]);
+var gender27 = new GenderChart($('.gender_chart:eq(27)'));
+gender27.render([0, 0]);
 </script>
 </body>
 </html>
