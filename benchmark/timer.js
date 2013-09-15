@@ -3,23 +3,51 @@ var microtime = require('microtime');
 
 var suite = new Benchmark.Suite();
 
+var start = new Date();
+var startNow = Date.now();
+var startMic = microtime.now();
+
 suite
 .add('Date.now()', function () {
+  var n = Date.now();
+})
+.add('Date.now() - Date.now()', function () {
   var diff1 = Date.now() - Date.now();
 })
+.add('Date.now() - startNow', function () {
+  var diff1 = Date.now() - startNow;
+})
+
+.add('new Date()', function () {
+  var d = new Date();
+})
+.add('new Date() - new Date()', function () {
+  var diff1 = new Date() - new Date();
+})
+.add('new Date() - start', function () {
+  var diff1 = new Date() - start;
+})
+
 .add('microtime.now()', function () {
+  var n = microtime.now();
+})
+.add('microtime.now() - microtime.now()', function () {
   var diff2 = microtime.now() - microtime.now();
 })
-.add('process.uptime()', function () {
+.add('microtime.now() - startMic', function () {
+  var diff2 = microtime.now() - startMic;
+})
+
+.add('process.uptime() - process.uptime()', function () {
   var diff3 = process.uptime() - process.uptime();
 })
-.add('process.hrtime()', function () {
+.add('process.hrtime() - process.hrtime()', function () {
   var t = process.hrtime();
   var diff4 = process.hrtime(t);
 })
 // add listeners
-.on('cycle', function (event, bench) {
-  console.log(String(bench));
+.on('cycle', function (event) {
+  console.log(String(event.target));
 })
 .on('complete', function () {
   console.log('Fastest is ' + this.filter('fastest').pluck('name'));
