@@ -58,6 +58,30 @@ else
 fi
 unset color_prompt force_color_prompt
 
+
+
+##### git master #####
+# https://gist.github.com/120804
+
+# COLORS
+LIGHT_GRAY="\[\033[0;37m\]"; BLUE="\[\033[1;36m\]"; RED="\[\033[0;31m\]"; LIGHT_RED="\[\033[1;31m\]"; 
+GREEN="\[\033[0;32m\]"; WHITE="\[\033[1;37m\]"; LIGHT_GRAY="\[\033[0;37m\]"; YELLOW="\[\033[1;33m\]";
+# GIT PROMPT (http://gist.github.com/120804)
+function parse_git_branch { 
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \(\1\)/'; 
+}
+function parse_git_status { 
+  git status 2> /dev/null | sed -e '/(working directory clean)$/!d' | wc -l; 
+}
+function check_git_changes { 
+  # tput setaf 1 = RED, tput setaf 2 = GREEN
+  [ `parse_git_status` -ne 1 ] && tput setaf 1 || tput setaf 2
+} 
+export PS1="${debian_chroot:+($debian_chroot)}$BLUE\u@$YELLOW\w\[\$(check_git_changes)\]\$(parse_git_branch)$LIGHT_GRAY $ "
+
+##### git master end #####
+
+
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
@@ -106,14 +130,77 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 test -r /sw/bin/init.sh && . /sw/bin/init.sh
-export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
-export NODE_PATH="/usr/local/lib/node_modules"
+#export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH
 
 export SVN_EDITOR="/usr/bin/vim"
-export PATH=$PATH:/usr/local/mysql/bin
+#export PATH=$PATH:/usr/local/mysql/bin
 #export PATH=$PATH:/Developer/usr/bin
-
-alias lnpm='npm --registry=http://registry.npm.tbdata.org'
+#export PATH=$PATH:$HOME/node_modules/.bin
 
 # see http://www.codethatmatters.com/2010/01/git-autocomplete-in-mac-os-x/
 source ~/git/git-completion.bash
+# npm completion
+source ~/git/npm-completion.bash
+
+#nvm
+. ~/git/nvm/nvm.sh
+[[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion
+
+# node_modules bin & mongodb 
+export PATH=$HOME/node_modules/.bin:$HOME/git/depot_tools:$HOME/apps/mongodb/bin:$PATH
+
+# chromedriver
+#export PATH=$HOME/git/ghost/bin:$PATH
+
+# Setting for the new UTF-8 terminal support in Lion
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# alias to nw
+#alias nw="/Applications/nw.app/Contents/MacOS/node-webkit"
+#alias node-webkit="/Applications/nw.app/Contents/MacOS/node-webkit"
+
+# spot
+export PATH=$HOME/git/spot:$PATH
+
+alias sublime="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
+#alias sublime3="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+
+# git
+alias gca="git commit -a"
+alias gd="git diff"
+alias gl="git log --graph"
+alias gs="git status"
+alias ga="git add"
+alias gb="git branch -av"
+alias gr="git remote -v"
+alias gp="git pull -p"
+
+# fengmk2 bin
+export PATH=$HOME/git/fengmk2.github.com/bin:$HOME/git/ngen/bin:$HOME/git/watch:$PATH
+
+# github proxy remote
+# http://twopenguins.org/tips/git-through-proxy.php
+alias gpl='export -n GIT_PROXY_COMMAND'
+alias gpr='export GIT_PROXY_COMMAND="$HOME/git/fengmk2.github.com/proxy-wrapper"'
+
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# HBASE
+#export HADOOP_HOME=$HOME/apps/hadoop-1.0.4
+export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
+
+export PATH=$HOME/apps/apache-maven-2.2.1/bin:$PATH
+
+# ADT
+export PATH=$HOME/AliDrive/adt-bundle-mac-x86_64/sdk/tools:$HOME/AliDrive/adt-bundle-mac-x86_64/sdk/platform-tools:$PATH
+
+# local/bin
+export PATH=$HOME/local/bin:$PATH
+
+# phantomjs
+export PATH=$HOME/apps/phantomjs/bin:$PATH
+
+
+. ~/.spm_completion
