@@ -145,6 +145,7 @@ source ~/git/fengmk2.github.com/npm-completion.bash
 #nvm
 . ~/git/nvm/nvm.sh
 [[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion
+nvm use 0.10
 
 # node_modules bin & mongodb 
 export PATH=$HOME/node_modules/.bin:$HOME/git/depot_tools:$HOME/apps/mongodb/bin:$PATH
@@ -164,7 +165,7 @@ export LC_ALL=en_US.UTF-8
 export PATH=$HOME/git/spot:$PATH
 
 alias sublime="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
-#alias sublime3="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+alias sublime3="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
 # git
 alias gca="git commit -a"
