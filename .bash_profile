@@ -202,5 +202,3 @@ export PATH=$HOME/local/bin:$PATH
 # phantomjs
 export PATH=$HOME/apps/phantomjs/bin:$PATH
 
-
-. ~/.spm_completion
