@@ -138,9 +138,9 @@ export SVN_EDITOR="/usr/bin/vim"
 #export PATH=$PATH:$HOME/node_modules/.bin
 
 # see http://www.codethatmatters.com/2010/01/git-autocomplete-in-mac-os-x/
-source ~/git/git-completion.bash
+source ~/git/fengmk2.github.com/git-completion.bash
 # npm completion
-source ~/git/npm-completion.bash
+source ~/git/fengmk2.github.com/npm-completion.bash
 
 #nvm
 . ~/git/nvm/nvm.sh
