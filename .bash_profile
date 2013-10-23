@@ -62,6 +62,7 @@ unset color_prompt force_color_prompt
 
 ##### git master #####
 # https://gist.github.com/120804
+# my fork: https://gist.github.com/fengmk2/7113078
 
 # COLORS
 LIGHT_GRAY="\[\033[0;37m\]"; BLUE="\[\033[1;36m\]"; RED="\[\033[0;31m\]"; LIGHT_RED="\[\033[1;31m\]"; 
@@ -71,11 +72,11 @@ function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \(\1\)/'; 
 }
 function parse_git_status { 
-  git status 2> /dev/null | sed -e '/(working directory clean)$/!d' | wc -l; 
+  git status 2> /dev/null | grep 'working directory clean' | wc -l; 
 }
 function check_git_changes { 
   # tput setaf 1 = RED, tput setaf 2 = GREEN
-  [ `parse_git_status` -ne 1 ] && tput setaf 1 || tput setaf 2
+  [ `parse_git_status` -eq 1 ] && tput setaf 2 || tput setaf 1;
 } 
 export PS1="${debian_chroot:+($debian_chroot)}$BLUE\u@$YELLOW\w\[\$(check_git_changes)\]\$(parse_git_branch)$LIGHT_GRAY $ "
 
@@ -165,7 +166,7 @@ export LC_ALL=en_US.UTF-8
 export PATH=$HOME/git/spot:$PATH
 
 alias sublime="/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
-alias sublime3="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+#alias sublime3="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
 # git
 alias gca="git commit -a"
