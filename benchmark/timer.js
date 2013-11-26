@@ -1,5 +1,6 @@
 var Benchmark = require('benchmark');
 var microtime = require('microtime');
+var microtime2 = require('microtime2');
 
 var suite = new Benchmark.Suite();
 
@@ -36,6 +37,16 @@ suite
 })
 .add('microtime.now() - startMic', function () {
   var diff2 = microtime.now() - startMic;
+})
+
+.add('microtime2.now()', function () {
+  var n = microtime2.now();
+})
+.add('microtime2.now() - microtime2.now()', function () {
+  var diff2 = microtime2.now() - microtime2.now();
+})
+.add('microtime2.now() - startMic', function () {
+  var diff2 = microtime2.now() - startMic;
 })
 
 .add('process.uptime() - process.uptime()', function () {

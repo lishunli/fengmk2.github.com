@@ -1,7 +1,5 @@
 # MK2's Blog use markdown in github
 
-<a href="http://jingjs.org" target="_blank"><img width="300" src="http://nfs.nodeblog.org/b/2/b2d5557fcea267c6b5ef13eb8762c4be.png" alt="Jingjs"></a>
-
 ## Who is MK2
 
 ![mk2 photo](https://secure.gravatar.com/avatar/95b9d41231617a05ced5604d242c9670?s=200)
@@ -20,7 +18,7 @@
 #### http & https
 
 * [response-patch](https://github.com/fengmk2/response-patch): monkey patch for `http.ServerResponse`.
-* [agentkeepalive](https://github.com/TBEDP/agentkeepalive): The nodejs's missing keep alive http.Agent. Support http and https. 
+* [agentkeepalive](https://github.com/TBEDP/agentkeepalive): The nodejs's missing keep alive http.Agent. Support http and https.
 * [urllib](https://github.com/TBEDP/urllib): Help in opening URLs (mostly HTTP) in a complex world — basic and digest authentication, redirections, cookies and more. Like python's _urllib_ module.
 * ~~[httpsync](https://github.com/fengmk2/node-curl): `httpsync` is a port of libcurl to node.js. Its interface emulates the `http` module of node.js. But in contrast to `http` module's asynchronous functions, `httpsync` provides the equivalent synchronous APIs.~~
 
@@ -49,7 +47,7 @@
 * [jscover](https://github.com/fengmk2/jscover): node wrap for JSCover.
 
 #### logging
- 
+
 * [logstream](https://github.com/fengmk2/logstream): Log file stream, including auto rolling feature, support multiprocess append write at the same time.
 
 #### Buffer, String, Stream
@@ -60,8 +58,8 @@
 * [formstream](https://github.com/fengmk2/formstream): A multipart/form-data encoded stream, helper for file upload.
 
 #### file system
- 
-* [ndir](https://github.com/fengmk2/ndir): The lost dir util tools. 
+
+* [ndir](https://github.com/fengmk2/ndir): The lost dir util tools.
 * [mdit](https://github.com/fengmk2/mdit): Markdown it, yes, everything!
 
 #### database
@@ -73,7 +71,7 @@
 
 #### Events & Callbacks
 
-* [eventproxy](https://github.com/JacksonTian/eventproxy): An implementation of task/event based asynchronous pattern. 
+* [eventproxy](https://github.com/JacksonTian/eventproxy): An implementation of task/event based asynchronous pattern.
 
 #### Tools
 
@@ -86,7 +84,7 @@
 * [emoji](https://github.com/fengmk2/emoji): This library allows the handling and conversion of Emoji in Javascript.
 
 #### code style
- 
+
 * [iFrame](https://github.com/windyrobin/iFrame): Nodejs code styles guide documents.
 
 ### Services API Client
@@ -105,7 +103,7 @@
 <br/>![fawave prev](http://ww2.sinaimg.cn/large/6cfc7910jw1dp88kwaao5j.jpg)
 * [mgravatar](https://github.com/fengmk2/mgravatar): Multi Globally Recognized Avatar.
 * [nodeclub](https://github.com/cnodejs/nodeclub): Community system base on nodejs. [CNode](http://cnodejs.org) use this.
-* [nodeblog](https://github.com/fengmk2/nodeblog): A blog system base on nodejs. 
+* [nodeblog](https://github.com/fengmk2/nodeblog): A blog system base on nodejs.
 * [nodebox](https://github.com/fengmk2/nodebox) : A file box base on nodejs.
 * [tjob](https://github.com/TBEDP/tjob): tao job in social network
 * [urlrar](https://github.com/fengmk2/urlrar): Expand any shorten url for you
@@ -152,7 +150,7 @@
 * [Blog/2013](./blog/2013)
  * [让 ejs 更加快 | Let ejs faster with options._with = false](./benchmark/ejs/with_false_better_than_true.html)
  * [Use Blanket.js instead of jscover](./blog/2013/05/blanketjs-jscoverage.html)
- * [Generate cobertura-xml report with mocha](./blog/2013/02/cobertura-xml-with-mocha.html) 
+ * [Generate cobertura-xml report with mocha](./blog/2013/02/cobertura-xml-with-mocha.html)
  * [nodejs domain module hello world and benchmark](./blog/2013/03/domain-helloworld-benchmark.html)
 * [Blog/2012](./blog/2012)
  * [使用 connect-domain 捕获异步调用中出现的异常](./blog/2012/12/domain_module.html)
@@ -170,6 +168,9 @@
 ## Events
 
 * <img width="100" src="http://nfs.nodeblog.org/b/2/b2d5557fcea267c6b5ef13eb8762c4be.png" alt="Jingjs"> [京JS](http://jingjs.org/): 2013 9 - 10, NOVEMBER, A two day conference in Beijing for the Chinese JavaScript and Node.js community. (一个在北京举办的为期二天，为中国JavaScript和Node.js研发者社区举办的国际性技术大会)
+
+![mk2&jackson&troy&goddy](http://nfs.nodeblog.org/b/8/b89258b13b66ee5abd4f530d018409f1.jpg)
+
 * [沪JS](http://www.hujs.org/): 2012 九月14－16日，上海, 一个为中国Javascript和Node.js开发者社区举办的会议
 
 [![gleen&troy&goddy&jackson&mk2](http://ww3.sinaimg.cn/bmiddle/6cfc7910jw1dx6wgxck38j.jpg)](http://ww3.sinaimg.cn/large/6cfc7910jw1dx6wgxck38j.jpg)
