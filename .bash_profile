@@ -204,3 +204,9 @@ export PATH=$HOME/local/bin:$PATH
 # phantomjs
 export PATH=$HOME/apps/phantomjs/bin:$PATH
 
+[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+
+export GOROOT=$HOME/apps/go
+export PATH=$PATH:$GOROOT/bin
+
+alias tcnpm='$HOME/node_modules/.bin/cnpm --registry=http://127.0.0.1:7001'
